@@ -6,7 +6,7 @@
 #    By: druina <druina@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/07 09:33:07 by druina            #+#    #+#              #
-#    Updated: 2023/03/07 11:16:31 by druina           ###   ########.fr        #
+#    Updated: 2023/03/07 12:52:28 by druina           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ HEADERS = -I ./src/so_long.h -I libft/src/libft.h -I mlx/include
 all: $(NAME)
 
 $(NAME): $(MANPATH)
-	@cd libft && make
+	@make -C libft
 	@cd libft && mv libft.a ..
 	@make -C MLX42
 	@cd MLX42 && mv libmlx42.a ..
