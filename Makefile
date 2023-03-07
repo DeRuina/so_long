@@ -6,7 +6,7 @@
 #    By: druina <druina@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/07 09:33:07 by druina            #+#    #+#              #
-#    Updated: 2023/03/07 12:55:44 by druina           ###   ########.fr        #
+#    Updated: 2023/03/07 14:33:26 by druina           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,9 @@ MANPATH = $(addprefix ./src/, $(SRC))
 
 FLAGS = -Wall -Wextra -Werror
 
-MLXFLAGS = -framework Cocoa -framework OpenGL -framework IOKit
+MLXFLAGS = -framework Cocoa -framework OpenGL -framework IOKit -framework AppKit
 
-HEADERS = -I ./src/so_long.h -I libft/src/libft.h -I mlx/include
+HEADER = -I ./src/so_long.h
 
 .PHONY: all clean fclean re
 
@@ -29,21 +29,17 @@ all: $(NAME)
 $(NAME): $(MANPATH)
 	@make -C Libft
 	@cd Libft && mv libft.a ..
-	@make -C MLX42
-	@cd MLX42 && mv libmlx42.a ..
-	@cc $(FLAGS) -o $(NAME) $(MANPATH) libft.a libmlx42.a $(HEADERS) -g
+	@cc $(FLAGS) -o $(NAME) $(MANPATH) $(MLXFLAGS) -lmlx libft.a $(HEADERS) -g
 
 clean:
 	@cd Libft && make clean
-	@cd MLX42 && make clean
 	@rm -f libft.a
-	@rm -f libmlx42.a
+	@rm -f libmlx.a
 
 
 fclean: clean
 	@rm -f $(NAME)
 	@cd Libft && make fclean
-	@cd MLX42 && make fclean
 
 
 

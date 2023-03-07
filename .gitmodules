@@ -1,6 +1,3 @@
-[submodule "MLX42"]
-	path = MLX42
-	url = https://github.com/Raspurrin/MLX42.git
 [submodule "Libft"]
 	path = Libft
 	url = https://github.com/DeRuina/Libft.git
