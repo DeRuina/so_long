@@ -6,7 +6,7 @@
 #    By: druina <druina@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/07 09:33:07 by druina            #+#    #+#              #
-#    Updated: 2023/03/07 12:52:28 by druina           ###   ########.fr        #
+#    Updated: 2023/03/07 12:55:44 by druina           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,14 +27,14 @@ HEADERS = -I ./src/so_long.h -I libft/src/libft.h -I mlx/include
 all: $(NAME)
 
 $(NAME): $(MANPATH)
-	@make -C libft
-	@cd libft && mv libft.a ..
+	@make -C Libft
+	@cd Libft && mv libft.a ..
 	@make -C MLX42
 	@cd MLX42 && mv libmlx42.a ..
 	@cc $(FLAGS) -o $(NAME) $(MANPATH) libft.a libmlx42.a $(HEADERS) -g
 
 clean:
-	@cd libft && make clean
+	@cd Libft && make clean
 	@cd MLX42 && make clean
 	@rm -f libft.a
 	@rm -f libmlx42.a
@@ -42,7 +42,7 @@ clean:
 
 fclean: clean
 	@rm -f $(NAME)
-	@cd libft && make fclean
+	@cd Libft && make fclean
 	@cd MLX42 && make fclean
 
 

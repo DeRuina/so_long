@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/07 11:38:49 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/07 12:55:52 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 # define SO_LONG_H
 
 # include "../MLX42/include/MLX42/MLX42.h"
-# include "../libft/src/libft.h"
+# include "../Libft/src/libft.h"
 
 #endif
