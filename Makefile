@@ -6,7 +6,7 @@
 #    By: druina <druina@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/07 09:33:07 by druina            #+#    #+#              #
-#    Updated: 2023/03/07 14:33:26 by druina           ###   ########.fr        #
+#    Updated: 2023/03/07 15:28:30 by druina           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ MANPATH = $(addprefix ./src/, $(SRC))
 
 FLAGS = -Wall -Wextra -Werror
 
-MLXFLAGS = -framework Cocoa -framework OpenGL -framework IOKit -framework AppKit
+MLXFLAGS = -framework OpenGL -framework AppKit
 
 HEADER = -I ./src/so_long.h
 
@@ -29,7 +29,7 @@ all: $(NAME)
 $(NAME): $(MANPATH)
 	@make -C Libft
 	@cd Libft && mv libft.a ..
-	@cc $(FLAGS) -o $(NAME) $(MANPATH) $(MLXFLAGS) -lmlx libft.a $(HEADERS) -g
+	@cc $(FLAGS) -o $(NAME) $(MANPATH) -lmlx $(MLXFLAGS) libft.a $(HEADERS) -g
 
 clean:
 	@cd Libft && make clean
