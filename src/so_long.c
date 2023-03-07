@@ -6,14 +6,13 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/07 09:39:10 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/07 11:06:46 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int main()
+int	main(void)
 {
-
 	return (0);
 }
