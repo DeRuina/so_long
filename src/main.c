@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.h                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/10 18:14:47 by druina           ###   ########.fr       */
+/*   Created: 2023/03/10 15:55:42 by druina            #+#    #+#             */
+/*   Updated: 2023/03/10 17:54:36 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SO_LONG_H
-# define SO_LONG_H
+#include "so_long.h"
 
-# include "../Libft/src/libft.h"
-# include "mlx.h"
-# include <fcntl.h>
-
-typedef struct map_check
+int	main(int argc, char **argv)
 {
-	int	empty_space;
-	int	collectible;
-	int	exit;
-	int	player;
-
-}		t_map_check;
-
-int		main(int argc, char **argv);
-int		check_map_content(char *map);
-int		first_and_last_row(char *line);
-int		map_rows(int fd);
-int		check_surrounding_wall(char *line);
-
-#endif
+	if (argc != 2)
+		return (ft_printf("Error: arg number\n"));
+	if (check_map_content(argv[1]) == -1)
+		return (ft_printf("Error: map invalid\n"));
+	return (EXIT_SUCCESS);
+}

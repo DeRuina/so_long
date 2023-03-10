@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/09 16:03:41 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/10 15:57:26 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void img_pix_put(t_img *img, int x, int y, int color)
 {
 	char *pixel;
 	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	*(int *)pixel = color;
+	*(unsigned int *)pixel = color;
 }
 
 int key_handler(int key, t_program *temp)
@@ -75,45 +75,54 @@ int mouse_movement_handler(int x, int y, t_program *temp)
 	return(0);
 }
 
-void	render_background(t_img *img, int color)
+void	render_background(t_img *img, int color, int x, int y)
 	{
 	int	i;
 	int	j;
 
 	i = 0;
-	while (i < 1000)
+	while (i < x)
 	{
 		j = 0;
-		while (j < 1000)
+		while (j < y)
 			img_pix_put(img, j++, i, color);
 		++i;
 	}
 	}
 
-t_img create_image(t_program *program)
+t_img create_image(t_program *program, int x, int y)
 {
 	t_img image;
 
-	image->mlx_img = mlx_new_image(program->mlx, 1000, 1000);
-	image->addr = mlx_get_data_addr(image->addr, &image->bpp, &image->line_len, &image->endian);
+	image.mlx_img = mlx_new_image(program->mlx, x, y);
+	image.addr= mlx_get_data_addr(image.mlx_img, &image.bpp, &image.line_len, &image.endian);
 	return (image);
 }
 
 int render(t_program *program)
 {
+	t_img image;
+	int i;
+	int j;
+
+	i = 300;
+	j = 300;
 	if (program->win == NULL)
 		return (1);
-	program->img = create_image(program);
-	render_background(&program->img, 0x3B18EC);
+	// p2->mlx = program->mlx;
+	// p2->win = program->win;
+	program->img = create_image(program, 1000, 1000);
+	render_background(&program->img, 0x3B18EC, 1000, 1000);
 	mlx_put_image_to_window(program->mlx, program->win, program->img.mlx_img, 0, 0);
-	// mlx_destroy_image(program->mlx, program->img.mlx_img);
-	// program->img = create_image(program);
-	// render_background(&program->img, 0xE8F70E);
-	// mlx_put_image_to_window(program->mlx, program->win, program->img.mlx_img, 0, 0);
+	image = create_image(program, i, j);
+	render_background(&image, 0xE8F70E, i, j);
+	mlx_put_image_to_window(program->mlx, program->win, image.mlx_img, 0, 0);
+
+
 	return (0);
 }
 
-int	main(void)
+int	so_long(void)
 {
 
 	t_program program;
