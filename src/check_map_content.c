@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/03/13 11:46:01 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/13 15:10:19 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	map_rows(char *map)
 {
 	int		count;
 	char	*line;
-	int 	fd;
+	int		fd;
 
 	fd = open(map, O_RDONLY);
 	count = 0;
@@ -54,7 +54,7 @@ int	check_rows_lenght(char *map)
 {
 	char	*line;
 	int		lenght;
-	int 	fd;
+	int		fd;
 
 	fd = open(map, O_RDONLY);
 	line = get_next_line_multiple(fd);
@@ -84,7 +84,7 @@ int	check_surrounding_wall(char *line)
 	while (*line != '\n')
 	{
 		arr[0] = *line;
-		if (count == 1 || count == (lenght -1))
+		if (count == 1 || count == (lenght - 1))
 			if (ft_atoi(arr) != 1)
 				return (-1);
 		line++;
@@ -119,23 +119,73 @@ t_map_check	map_check_init(void)
 	new.empty_space = 0;
 	new.exit = 0;
 	new.player = 0;
+	new.player_x = 0;
+	new.player_y = 0;
+	new.exit_x = 0;
+	new.exit_y = 0;
 	return (new);
 }
 
-int free_close_exit(int fd, char *line, int flag)
+int	free_close_exit(int fd, char *line, int flag)
 {
 	if (fd != 0)
 	{
 		close(fd);
-		close(fd +1);
-		close(fd +2);
+		close(fd + 1);
+		close(fd + 2);
 	}
 	if (line)
 		free(line);
 	if (flag == -1)
 		return (-1);
 	else
-		return(0);
+		return (0);
+}
+
+void	check_P_E_locations(int *location_x, int *location_y, char *map_lines[],
+		char *letter)
+{
+	int		i;
+	int		j;
+	char	arr[2];
+
+	arr[1] = '\0';
+	i = 0;
+	j = 0;
+	while (map_lines[j] != '\0')
+	{
+		while (map_lines[j][i] != '\n')
+		{
+			arr[0] = map_lines[j][i];
+			if (ft_strncmp(arr, letter, 1) == 0)
+			{
+				(*location_x) = j;
+				(*location_y) = i;
+				return ;
+			}
+			i++;
+		}
+		i = 0;
+		j++;
+	}
+}
+
+int	check_valid_path(char *map, int rows, t_map_check check)
+{
+	int		fd;
+	char	*map_lines[rows + 1];
+	int		i;
+
+	i = -1;
+	map_lines[rows] = 0;
+	fd = open(map, O_RDONLY);
+	while (map_lines[i++] != '\0')
+		map_lines[i] = get_next_line_multiple(fd);
+	check_P_E_locations(&check.player_x, &check.player_y, map_lines, "P");
+	check_P_E_locations(&check.exit_x, &check.exit_y, map_lines, "E");
+	if (check.player_y <= check.exit_y)
+
+	return (0);
 }
 
 int	check_map_content(char *map)
@@ -159,15 +209,15 @@ int	check_map_content(char *map)
 			break ;
 		if (count == 1 || count == map_rows_count)
 			if (first_and_last_row(line) == -1)
-				return (free_close_exit(fd,line, -1));
+				return (free_close_exit(fd, line, -1));
 		if (check_surrounding_wall(line) == -1)
-			return (free_close_exit(fd,line, -1));
+			return (free_close_exit(fd, line, -1));
 		check_P_E_X(&check.player, &check.exit, &check.collectible, line);
 		free(line);
 		count++;
 	}
 	if (check.exit != 1 || check.player != 1 || check.collectible < 1)
 		free_close_exit(fd, NULL, -1);
-
+	check_valid_path(map, map_rows_count, check);
 	return (free_close_exit(fd, NULL, 0));
 }

@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/13 11:43:51 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/13 14:35:27 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ typedef struct map_check
 	int		collectible;
 	int		exit;
 	int		player;
+	int		player_x;
+	int		player_y;
+	int		exit_x;
+	int		exit_y;
 
 }			t_map_check;
 
@@ -35,5 +39,8 @@ int			check_rows_lenght(char *map);
 void		check_P_E_X(int *player, int *exit, int *collectible, char *line);
 t_map_check	map_check_init(void);
 int			free_close_exit(int fd, char *line, int flag);
+int			check_valid_path(char *map, int rows, t_map_check check);
+void		check_P_E_locations(int *location_x, int *location_y,
+				char *map_lines[], char *letter);
 
 #endif
