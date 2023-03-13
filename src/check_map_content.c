@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/03/10 18:13:08 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/13 10:55:00 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 int	first_and_last_row(char *line)
 {
-	int	count;
+	int		count;
+	char	arr[2];
 
+	arr[1] = '\0';
 	count = 0;
-	while (*line)
+	while (*line != '\n')
 	{
-		if (ft_atoi(*line) != 1)
+		arr[0] = *line;
+		if (ft_atoi(arr) != 1)
 			return (-1);
 		count++;
 		line++;
@@ -27,15 +30,17 @@ int	first_and_last_row(char *line)
 	return (count);
 }
 
-int	map_rows(int fd)
+int	map_rows(char *map)
 {
 	int		count;
 	char	*line;
+	int 	fd;
 
+	fd = open(map, O_RDONLY);
 	count = 0;
 	while (1)
 	{
-		line = get_next_line(fd);
+		line = get_next_line_multiple(fd);
 		if (line == NULL)
 			break ;
 		else
@@ -45,22 +50,76 @@ int	map_rows(int fd)
 	return (count);
 }
 
-int check_surrounding_wall(char *line)
+int	check_rows_lenght(char *map)
 {
-	int lenght;
-	int count;
+	char	*line;
+	int		lenght;
+	int 	fd;
 
+	fd = open(map, O_RDONLY);
+	line = get_next_line_multiple(fd);
+	lenght = ft_strlen(line);
+	free(line);
+	while (1)
+	{
+		line = get_next_line_multiple(fd);
+		if (line == NULL)
+			break ;
+		if (ft_strlen(line) != lenght)
+			return (-1);
+		free(line);
+	}
+	return (0);
+}
+
+int	check_surrounding_wall(char *line)
+{
+	int		lenght;
+	int		count;
+	char	arr[2];
+
+	arr[1] = '\0';
 	count = 1;
 	lenght = ft_strlen(line);
-	while (*line)
+	while (*line != '\n')
 	{
-		if (count == 1 || count == lenght)
-			if (ft_atoi(*line) != 1)
+		arr[0] = *line;
+		if (count == 1 || count == (lenght -1))
+			if (ft_atoi(arr) != 1)
 				return (-1);
 		line++;
 		count++;
 	}
 	return (count);
+}
+
+void	check_P_E_X(int *player, int *exit, int *collectible, char *line)
+{
+	char	arr[2];
+
+	arr[1] = '\0';
+	while (*line != '\n')
+	{
+		arr[0] = *line;
+		if (ft_strncmp(arr, "P", 1) == 0)
+			(*player)++;
+		if (ft_strncmp(arr, "E", 1) == 0)
+			(*exit)++;
+		if (ft_strncmp(arr, "C", 1) == 0)
+			(*collectible)++;
+		line++;
+	}
+}
+
+t_map_check	map_check_init(void)
+{
+	t_map_check	new;
+
+	new.collectible = 0;
+	new.empty_space = 0;
+	new.exit = 0;
+	new.player = 0;
+	return (new);
 }
 
 int	check_map_content(char *map)
@@ -71,24 +130,33 @@ int	check_map_content(char *map)
 	t_map_check	check;
 	int			map_rows_count;
 
+	check = map_check_init();
 	count = 1;
 	fd = open(map, O_RDONLY);
-	if (fd == -1)
+	if (fd == -1 || check_rows_lenght(map) == -1)
 		return (-1);
-	map_rows_count = map_rows(fd);
+	map_rows_count = map_rows(map);
 	while (1)
 	{
-		line = get_next_line(fd);
+		line = get_next_line_multiple(fd);
 		if (line == NULL)
 			break ;
 		if (count == 1 || count == map_rows_count)
 			if (first_and_last_row(line) == -1)
+			{
+				free(line);
 				return (-1);
+			}
 		if (check_surrounding_wall(line) == -1)
-			return(-1);
-
+			{
+				free(line);
+				return (-1);
+			}
+		check_P_E_X(&check.player, &check.exit, &check.collectible, line);
 		free(line);
 		count++;
 	}
+	if (check.exit != 1 || check.player != 1 || check.collectible < 1)
+		return (-1);
 	return (0);
 }
