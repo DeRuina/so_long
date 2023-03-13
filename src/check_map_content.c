@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/03/13 11:14:37 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/13 11:46:01 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ int	map_rows(char *map)
 			count++;
 		free(line);
 	}
-	close(fd);
 	return (count);
 }
 
@@ -70,7 +69,6 @@ int	check_rows_lenght(char *map)
 			return (-1);
 		free(line);
 	}
-	close(fd);
 	return (0);
 }
 
@@ -124,6 +122,22 @@ t_map_check	map_check_init(void)
 	return (new);
 }
 
+int free_close_exit(int fd, char *line, int flag)
+{
+	if (fd != 0)
+	{
+		close(fd);
+		close(fd +1);
+		close(fd +2);
+	}
+	if (line)
+		free(line);
+	if (flag == -1)
+		return (-1);
+	else
+		return(0);
+}
+
 int	check_map_content(char *map)
 {
 	int			fd;
@@ -145,25 +159,15 @@ int	check_map_content(char *map)
 			break ;
 		if (count == 1 || count == map_rows_count)
 			if (first_and_last_row(line) == -1)
-			{
-				close(fd);
-				free(line);
-				return (-1);
-			}
+				return (free_close_exit(fd,line, -1));
 		if (check_surrounding_wall(line) == -1)
-			{
-				close(fd);
-				free(line);
-				return (-1);
-			}
+			return (free_close_exit(fd,line, -1));
 		check_P_E_X(&check.player, &check.exit, &check.collectible, line);
 		free(line);
 		count++;
 	}
 	if (check.exit != 1 || check.player != 1 || check.collectible < 1)
-	{
-		close(fd);
-		return (-1);
-	}
-	return (0);
+		free_close_exit(fd, NULL, -1);
+
+	return (free_close_exit(fd, NULL, 0));
 }

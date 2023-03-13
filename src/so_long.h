@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/13 10:17:56 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/13 11:43:51 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ int			check_surrounding_wall(char *line);
 int			check_rows_lenght(char *map);
 void		check_P_E_X(int *player, int *exit, int *collectible, char *line);
 t_map_check	map_check_init(void);
+int			free_close_exit(int fd, char *line, int flag);
 
 #endif
