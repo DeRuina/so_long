@@ -6,13 +6,13 @@
 #    By: druina <druina@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/07 09:33:07 by druina            #+#    #+#              #
-#    Updated: 2023/03/13 10:40:51 by druina           ###   ########.fr        #
+#    Updated: 2023/03/14 14:08:32 by druina           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
 
-SRC = so_long.c main.c check_map_content.c
+SRC = so_long.c main.c check_map_content.c valid_path.c
 
 MANPATH = $(addprefix ./src/, $(SRC))
 

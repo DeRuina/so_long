@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/03/13 15:10:19 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/14 09:59:42 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,24 +170,6 @@ void	check_P_E_locations(int *location_x, int *location_y, char *map_lines[],
 	}
 }
 
-int	check_valid_path(char *map, int rows, t_map_check check)
-{
-	int		fd;
-	char	*map_lines[rows + 1];
-	int		i;
-
-	i = -1;
-	map_lines[rows] = 0;
-	fd = open(map, O_RDONLY);
-	while (map_lines[i++] != '\0')
-		map_lines[i] = get_next_line_multiple(fd);
-	check_P_E_locations(&check.player_x, &check.player_y, map_lines, "P");
-	check_P_E_locations(&check.exit_x, &check.exit_y, map_lines, "E");
-	if (check.player_y <= check.exit_y)
-
-	return (0);
-}
-
 int	check_map_content(char *map)
 {
 	int			fd;
@@ -216,8 +198,8 @@ int	check_map_content(char *map)
 		free(line);
 		count++;
 	}
-	if (check.exit != 1 || check.player != 1 || check.collectible < 1)
+	if (check.exit != 1 || check.player != 1 || check.collectible < 1
+		|| check_valid_path(map, map_rows_count, check) == -1)
 		free_close_exit(fd, NULL, -1);
-	check_valid_path(map, map_rows_count, check);
 	return (free_close_exit(fd, NULL, 0));
 }
