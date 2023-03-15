@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/03/14 09:59:42 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/15 10:18:19 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ int	free_close_exit(int fd, char *line, int flag)
 		close(fd);
 		close(fd + 1);
 		close(fd + 2);
+		close(fd + 3);
 	}
 	if (line)
 		free(line);
@@ -198,8 +199,9 @@ int	check_map_content(char *map)
 		free(line);
 		count++;
 	}
-	if (check.exit != 1 || check.player != 1 || check.collectible < 1
-		|| check_valid_path(map, map_rows_count, check) == -1)
-		free_close_exit(fd, NULL, -1);
+	if (check.exit != 1 || check.player != 1 || check.collectible < 1)
+		return(free_close_exit(fd, NULL, -1));
+	if (check_valid_path(map, map_rows_count) == -1)
+		return(free_close_exit(fd, NULL, -1));
 	return (free_close_exit(fd, NULL, 0));
 }

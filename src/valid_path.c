@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/03/14 14:23:47 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/15 10:24:32 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,27 @@ bool	is_a_path(char *map_lines[], int i, int j, bool *visited_block[])
 
 	arr[1] = '\0';
 	arr[0] = map_lines[i][j];
+	if (ft_strncmp(arr, "1", 1) == 0)
+		return (false);
 	if (check_boundaries(map_lines, i, j) == true  && ft_strncmp(arr, "1", 1) != 0 && !visited_block[i][j])
 		visited_block[i][j] = true;
 	if (ft_strncmp(arr, "E", 1) == 0)
 		return (true);
-	up = is_a_path(map_lines, i - 1, j, visited_block);
-	if (up)
+	if (!visited_block[i-1][j])
+		up = is_a_path(map_lines, i - 1, j, visited_block);
+	if (up == true)
 		return (true);
-	down = is_a_path(map_lines, i + 1, j, visited_block);
-	if (down)
+	if (!visited_block[i+1][j])
+		down = is_a_path(map_lines, i + 1, j, visited_block);
+	if (down == true)
 		return (true);
-	left = is_a_path(map_lines, i , j - 1, visited_block);
-	if (left)
+	if (!visited_block[i][j - 1])
+		left = is_a_path(map_lines, i , j - 1, visited_block);
+	if (left == true)
 		return (true);
-	right = is_a_path(map_lines, i , j + 1, visited_block);
-	if (right)
+	if (!visited_block[i][j + 1])
+		right = is_a_path(map_lines, i , j + 1, visited_block);
+	if (right == true)
 		return (true);
 	return (false);
 }
@@ -63,9 +69,7 @@ bool	check_path_recursion(char *map_lines[], int rows)
 	int		j;
 	bool	*visited_block[rows];
 	char arr[2];
-	bool flag;
 
-	flag = false;
 	i = -1;
 	j = 0;
 	while (i++ != rows -1)
@@ -79,39 +83,29 @@ bool	check_path_recursion(char *map_lines[], int rows)
 		{
 			arr[0] = map_lines[i][j];
 			if (ft_strncmp(arr, "P", 1) == 0 && !visited_block[i][j])
-			{
 				if (is_a_path(map_lines, i, j, visited_block) == true)
-				{
-					flag = true;
-					break;
-				}
-			}
+					return (true);
 			j++;
 		}
 		j = 0;
 		i++;
 	}
-		return (flag);
+		return (false);
 }
 
-int	check_valid_path(char *map, int rows, t_map_check check)
+int	check_valid_path(char *map, int rows)
 {
 	int		fd;
 	char	*map_lines[rows + 1];
 	int		i;
-	int answer;
 
 	i = -1;
-	answer = -1;
 	map_lines[rows] = 0;
 	fd = open(map, O_RDONLY);
 	while (map_lines[i++] != '\0')
 		map_lines[i] = get_next_line_multiple(fd);
-	check_P_E_locations(&check.player_x, &check.player_y, map_lines, "P");
-	check_P_E_locations(&check.exit_x, &check.exit_y, map_lines, "E");
-	if (check_path_recursion(map_lines, rows) == true)
-		answer = 0;
-	// free_2d(map_lines);
-	return (answer);
+	if (check_path_recursion(map_lines, rows) == false)
+		return (-1);
+	return (0);
 
 }

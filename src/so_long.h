@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/14 14:19:03 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/15 09:40:08 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 typedef enum bool
 {
-	true = 3,
-	false = 4
+	false,
+	true
 }			bool;
 
 typedef struct map_check
@@ -45,7 +45,7 @@ int			check_rows_lenght(char *map);
 void		check_P_E_X(int *player, int *exit, int *collectible, char *line);
 t_map_check	map_check_init(void);
 int			free_close_exit(int fd, char *line, int flag);
-int			check_valid_path(char *map, int rows, t_map_check check);
+int			check_valid_path(char *map, int rows);
 void		check_P_E_locations(int *location_x, int *location_y,
 				char *map_lines[], char *letter);
 bool		check_path_recursion(char *map_lines[], int rows);
