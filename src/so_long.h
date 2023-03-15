@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/15 13:43:14 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/15 14:31:33 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ void		check_P_E_locations(int *location_x, int *location_y,
 bool		check_path_recursion(char *map_lines[], int rows, int lenght);
 bool		is_a_path(char *map_lines[], int i, int j, int *visited_block[]);
 bool		check_boundaries(char *map_lines[], int i, int j);
+void		free_arrays(char *array[], int *array_int[]);
 
 #endif

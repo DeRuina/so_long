@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/03/15 13:44:11 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/15 14:38:25 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,30 @@ bool	is_a_path(char *map_lines[], int i, int j, int *visited_block[])
 	return (false);
 }
 
+void free_arrays(char *array[], int *array_int[])
+{
+	int i;
+
+	i = -1;
+	if (array_int == NULL)
+	{
+	while (array[i++] != '\0')
+		free(array[i]);
+	}
+	if (array == NULL)
+	{
+		while (array_int[i++] != '\0')
+		free(array_int[i]);
+	}
+}
+
 bool	check_path_recursion(char *map_lines[], int rows, int lenght)
 {
 	int		i;
 	int		j;
 	int		*visited_block[rows + 1];
 	char 	arr[2];
+	bool 	flag;
 
 	i = -1;
 	j = 0;
@@ -72,7 +90,7 @@ bool	check_path_recursion(char *map_lines[], int rows, int lenght)
 		visited_block[i] = ft_calloc(lenght, sizeof(int));
 	i = 0;
 	arr[1] = '\0';
-
+	flag = false;
 	while (i < rows)
 	{
 		while (j < ft_strlen(map_lines[0]) -1)
@@ -80,13 +98,18 @@ bool	check_path_recursion(char *map_lines[], int rows, int lenght)
 			arr[0] = map_lines[i][j];
 			if (ft_strncmp(arr, "P", 1) == 0 && !visited_block[i][j])
 				if (is_a_path(map_lines, i, j, visited_block) == true)
-					return (true);
+				{
+					flag = true;
+					free_arrays(NULL, visited_block);
+				}
 			j++;
 		}
 		j = 0;
 		i++;
 	}
-		return (false);
+	if (flag == false)
+		free_arrays(NULL, visited_block);
+	return (flag);
 }
 
 int	check_valid_path(char *map, int rows)
@@ -94,14 +117,17 @@ int	check_valid_path(char *map, int rows)
 	int		fd;
 	char	*map_lines[rows + 1];
 	int		i;
+	int 	answer;
 
 	i = -1;
+	answer = 0;
 	map_lines[rows] = 0;
 	fd = open(map, O_RDONLY);
 	while (map_lines[i++] != '\0')
 		map_lines[i] = get_next_line_multiple(fd);
 	if (check_path_recursion(map_lines, rows, ft_strlen(map_lines[0])) == false)
-		return (-1);
-	return (0);
+		answer = -1;
+	free_arrays(map_lines, NULL);
+	return (answer);
 
 }
