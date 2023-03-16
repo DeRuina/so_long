@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/10 15:57:26 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/16 10:57:51 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,23 @@ int render(t_program *program)
 	t_img image;
 	int i;
 	int j;
+	int width;
+	int height;
 
+	width = 32;
+	height = 32;
 	i = 300;
 	j = 300;
 	if (program->win == NULL)
 		return (1);
 	// p2->mlx = program->mlx;
 	// p2->win = program->win;
-	program->img = create_image(program, 1000, 1000);
-	render_background(&program->img, 0x3B18EC, 1000, 1000);
+	program->img = create_image(program, 480, 480);
+	render_background(&program->img, 0x3B18EC, 480, 480);
 	mlx_put_image_to_window(program->mlx, program->win, program->img.mlx_img, 0, 0);
-	image = create_image(program, i, j);
-	render_background(&image, 0xE8F70E, i, j);
+	// image = create_image(program, i, j);
+	// render_background(&image, 0xE8F70E, i, j);
+	image.mlx_img = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
 	mlx_put_image_to_window(program->mlx, program->win, image.mlx_img, 0, 0);
 
 
@@ -129,7 +134,7 @@ int	so_long(void)
 
 
 	program.mlx  = mlx_init();
-	program.win = mlx_new_window(program.mlx, 1000, 1000, "so long");
+	program.win = mlx_new_window(program.mlx, 480, 480, "so long");
 	// program.img.mlx_img = mlx_new_image(program.mlx, 1000, 1000);
 	// program.img.addr = mlx_get_data_addr(program.img.mlx_img, &program.img.bpp, &program.img.line_len, &program.img.endian);
 

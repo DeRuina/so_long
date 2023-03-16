@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/03/15 10:18:19 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/16 16:11:07 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,9 @@ int	check_map_content(char *map)
 	}
 	if (check.exit != 1 || check.player != 1 || check.collectible < 1)
 		return(free_close_exit(fd, NULL, -1));
-	if (check_valid_path(map, map_rows_count) == -1)
+	if (check_valid_path(map, map_rows_count, "E") == -1)
+		return(free_close_exit(fd, NULL, -1));
+	if (check_valid_path(map, map_rows_count, "C") == -1)
 		return(free_close_exit(fd, NULL, -1));
 	return (free_close_exit(fd, NULL, 0));
 }
