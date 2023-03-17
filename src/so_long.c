@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/17 13:59:40 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/17 15:08:17 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ t_img create_image(t_program *program, int x, int y)
 int render(t_program *program)
 {
 	t_img image;
+	t_img image2;
 	int width;
 	int height;
 
@@ -114,8 +115,11 @@ int render(t_program *program)
 		return (1);
 	// p2->mlx = program->mlx;
 	// p2->win = program->win;
-	program->img = create_image(program, program->lenght, program->height);
-	render_background(&program->img, 0x3B18EC, program->lenght, program->height);
+	image2 = create_image(program, program->lenght, program->height);
+	render_background(&image2, 0xF9F6EE, program->lenght, program->height);
+	mlx_put_image_to_window(program->mlx, program->win, image2.mlx_img, 0, 0);
+	program->img.mlx_img = mlx_xpm_file_to_image(program->mlx, "./img/hive1.xpm", &program
+	->lenght, &program->height);
 	mlx_put_image_to_window(program->mlx, program->win, program->img.mlx_img, 0, 0);
 	// image = create_image(program, i, j);
 	// render_background(&image, 0xE8F70E, i, j);
