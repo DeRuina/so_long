@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/17 09:19:41 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/17 13:49:39 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			check_map_content(char *map);
 int			first_and_last_row(char *line);
 int			map_rows(char *map);
 int			check_surrounding_wall(char *line);
-int			check_rows_lenght(char *map);
+int			check_rows_lenght(char *map, int flag);
 void		check_P_E_X(int *player, int *exit, int *collectible, char *line);
 t_map_check	map_check_init(void);
 int			free_close_exit(int fd, char *line, int flag);
@@ -53,7 +53,7 @@ bool		check_path_recursion(char *map_lines[], int rows, int lenght,
 bool		is_a_path(char *map_lines[], int i, int j, int *visited_block[]);
 bool		check_boundaries(char *map_lines[], int i, int j);
 void		free_arrays(char *array[], int *array_int[]);
-int			so_long(void);
-char *join_and_free_item_and_amount(char *item, int amount, char *line);
+int			so_long(int x, int y);
+char		*join_and_free_item_and_amount(char *item, int amount, char *line);
 
 #endif

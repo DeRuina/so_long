@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/03/17 08:01:15 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/17 13:51:19 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	map_rows(char *map)
 	return (count);
 }
 
-int	check_rows_lenght(char *map)
+int	check_rows_lenght(char *map, int flag)
 {
 	char	*line;
 	int		lenght;
@@ -60,6 +60,8 @@ int	check_rows_lenght(char *map)
 	line = get_next_line_multiple(fd);
 	lenght = ft_strlen(line);
 	free(line);
+	if (flag == 1)
+		return (lenght);
 	while (1)
 	{
 		line = get_next_line_multiple(fd);
@@ -182,7 +184,7 @@ int	check_map_content(char *map)
 	check = map_check_init();
 	count = 1;
 	fd = open(map, O_RDONLY);
-	if (fd == -1 || check_rows_lenght(map) == -1)
+	if (fd == -1 || check_rows_lenght(map, 0) == -1)
 		return (-1);
 	map_rows_count = map_rows(map);
 	while (1)
@@ -205,5 +207,5 @@ int	check_map_content(char *map)
 		return(free_close_exit(fd, NULL, -1));
 	if (check_valid_path(map, map_rows_count, "C", check.collectible) == -1)
 		return(free_close_exit(fd, NULL, -1));
-	return (free_close_exit(fd, NULL, 0));
+	return (0);
 }
