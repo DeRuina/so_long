@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/21 09:37:31 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/21 15:45:04 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct  s_program
 		int height;
 		int lenght;
 		char *map;
+		int **map_2d;
 	}               t_program;
 
 void img_pix_put(t_img *img, int x, int y, int color)
@@ -103,55 +104,105 @@ t_img create_image(t_program *program, int x, int y)
 	return (image);
 }
 
-// void read_map_to_nbr(char *map)
-// {
-// 	char	*map_lines[map_rows(map) + 1];
-// 	int		fd;
-// 	int		i;
-// 	int		k;
+int **read_map_to_nbr(char *map)
+{
+	char	*map_lines[map_rows(map) + 1];
+	int		**map_lines_nbr;
+	int		fd;
+	int		i;
+	int		k;
 
 
-// 	k = 0;
-// 	i = -1;
-// 	map_lines[map_rows(map)] = 0;
-// 	fd = open(map, O_RDONLY);
-// 	while (i++ < map_rows(map))
-// 		map_lines[i] = get_next_line_multiple(fd);
-// 	i = 0;
+	k = -1;
+	i = -1;
+	map_lines_nbr = malloc((map_rows(map) + 1) * sizeof(int *));
+	while (++i < (map_rows(map) + 1))
+		map_lines_nbr[i] = malloc((check_rows_lenght(map, 1) - 1) * sizeof(int));
+	map_lines[map_rows(map)] = 0;
+	map_lines_nbr[map_rows(map)] = 0;
+	fd = open(map, O_RDONLY);
+	i = -1;
+	while (i++ < map_rows(map))
+		map_lines[i] = get_next_line_multiple(fd);
+	i = -1;
+	while (map_lines[++i] != 0)
+	{
+		while (map_lines[i][++k] != '\n')
+		{
+			if (map_lines[i][k] == 'P')
+				map_lines_nbr[i][k] = 2;
+			else if (map_lines[i][k] == 'C')
+				map_lines_nbr[i][k] = 3;
+			else if (map_lines[i][k] == 'E')
+				map_lines_nbr[i][k] = 4;
+			else
+				map_lines_nbr[i][k] = map_lines[i][k] - '0';
+		}
+		k = -1;
+	}
+	free_arrays(map_lines, NULL);
+	return (map_lines_nbr);
+}
 
+void draw_base(t_program *program, int width, int height)
+{
+	int		j;
+	int 	k;
+	int		x;
+	int 	y;
+	int		row_len;
+	void 	*temp;
 
-// }
+	j = -1;
+	k = -1;
+	x = 0;
+	y = 0;
+	row_len = check_rows_lenght(program->map,1) - 1;
+	while (program->map_2d[++j] != 0)
+	{
+		while (++k < row_len)
+		{
+			temp = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
+			mlx_put_image_to_window(program->mlx, program->win, temp, x, y);
+			x += 96;
+		}
+		x = 0;
+		y += 96;
+		k = -1;
+	}
+
+}
 
 void draw_map(t_program *program, int width, int height)
 {
-	char	*map_lines[map_rows(program->map) + 1];
-	int		fd;
 	int		i;
 	int		j;
 	int 	k;
 	void	*map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1)) + 1];
-	char	arr[2];
+	int		row_len;
 
 
+	draw_base(program, width, height);
 	i = -1;
 	j = -1;
 	k = -1;
-	arr[1] = '\0';
-	map_lines[map_rows(program->map)] = 0;
-	fd = open(program->map, O_RDONLY);
-	while (i++ < map_rows(program->map))
-		map_lines[i] = get_next_line_multiple(fd);
+	row_len = check_rows_lenght(program->map,1) - 1;
 	map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1))] = 0;
 	i = 0;
-	while (map_lines[++j] != NULL)
+	while (program->map_2d[++j] != 0)
 	{
-		while (map_lines[j][++k] != '\n')
+		while (++k < row_len)
 		{
-			arr[0] = map_lines[j][k];
-			if (ft_strncmp(arr, "1", 1) == 0)
-				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/fire1.xpm", &width, &height);
+			if (program->map_2d[j][k] == 1)
+				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/tree2.xpm", &width, &height);
+			else if (program->map_2d[j][k] == 3)
+				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
+			else if (program->map_2d[j][k] == 4)
+				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
+			else if (program->map_2d[j][k] == 2)
+				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
 			else
-				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/tile.xpm", &width, &height);
+				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
 		}
 		k = -1;
 	}
@@ -161,21 +212,21 @@ void draw_map(t_program *program, int width, int height)
 
 	while (map_tiles[i] != NULL)
 	{
-		arr[0] = check_rows_lenght(program->map, 1) - 1;
-		while (arr[0]-- != 0)
+		while (row_len-- != 0)
 		{
 			mlx_put_image_to_window(program->mlx, program->win, map_tiles[i++], k, j);
 			k += 96;
 		}
 		k = 0;
 		j += 96;
+		row_len = check_rows_lenght(program->map,1) - 1;
 	}
 
 }
 
 int render(t_program *program)
 {
-	t_img image;
+	// t_img image;
 	int width;
 	int height;
 
@@ -195,8 +246,8 @@ int render(t_program *program)
 	// mlx_put_image_to_window(program->mlx, program->win, program->img.mlx_img, 0, 0);
 	// image = create_image(program, i, j);
 	// render_background(&image, 0xE8F70E, i, j);
-	image.mlx_img = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
-	mlx_put_image_to_window(program->mlx, program->win, image.mlx_img, 192, 384);
+	// image.mlx_img = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
+	// mlx_put_image_to_window(program->mlx, program->win, image.mlx_img, 192, 384);
 
 
 	return (0);
@@ -215,6 +266,7 @@ int	so_long(int x, int y, char *map)
 	program.lenght = x;
 	program.height = y;
 	program.map = map;
+	program.map_2d = read_map_to_nbr(map);
 	program.mlx  = mlx_init();
 	program.win = mlx_new_window(program.mlx, program.lenght, program.height, "so long");
 	// program.img.mlx_img = mlx_new_image(program.mlx, 1000, 1000);

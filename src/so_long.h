@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/20 08:48:02 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/21 09:55:16 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ bool		check_boundaries(char *map_lines[], int i, int j);
 void		free_arrays(char *array[], int *array_int[]);
 int			so_long(int x, int y, char *map);
 char		*join_and_free_item_and_amount(char *item, int amount, char *line);
+int			**read_map_to_nbr(char *map);
 
 #endif
