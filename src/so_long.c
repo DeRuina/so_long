@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/20 11:13:25 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/21 09:37:31 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,25 @@ t_img create_image(t_program *program, int x, int y)
 	return (image);
 }
 
+// void read_map_to_nbr(char *map)
+// {
+// 	char	*map_lines[map_rows(map) + 1];
+// 	int		fd;
+// 	int		i;
+// 	int		k;
+
+
+// 	k = 0;
+// 	i = -1;
+// 	map_lines[map_rows(map)] = 0;
+// 	fd = open(map, O_RDONLY);
+// 	while (i++ < map_rows(map))
+// 		map_lines[i] = get_next_line_multiple(fd);
+// 	i = 0;
+
+
+// }
+
 void draw_map(t_program *program, int width, int height)
 {
 	char	*map_lines[map_rows(program->map) + 1];
@@ -136,15 +155,16 @@ void draw_map(t_program *program, int width, int height)
 		}
 		k = -1;
 	}
-	i = -1;
+	i = 0;
 	j = 0;
 	k = 0;
-	arr[0] = check_rows_lenght(program->map, 1);
-	while (map_tiles[++i] != NULL)
+
+	while (map_tiles[i] != NULL)
 	{
+		arr[0] = check_rows_lenght(program->map, 1) - 1;
 		while (arr[0]-- != 0)
 		{
-			mlx_put_image_to_window(program->mlx, program->win, map_tiles[i], k, j);
+			mlx_put_image_to_window(program->mlx, program->win, map_tiles[i++], k, j);
 			k += 96;
 		}
 		k = 0;
@@ -156,15 +176,15 @@ void draw_map(t_program *program, int width, int height)
 int render(t_program *program)
 {
 	t_img image;
-	// t_img image2;
 	int width;
 	int height;
 
 	width = 96;
 	height = 96;
+	// t_img image2;
+
 	if (program->win == NULL)
 		return (1);
-	// draw_map(program, width, height);
 	// p2->mlx = program->mlx;
 	// p2->win = program->win;
 	// image2 = create_image(program, program->lenght, program->height);
@@ -186,6 +206,11 @@ int	so_long(int x, int y, char *map)
 {
 
 	t_program program;
+	int width;
+	int height;
+
+	width = 96;
+	height = 96;
 
 	program.lenght = x;
 	program.height = y;
@@ -196,6 +221,7 @@ int	so_long(int x, int y, char *map)
 	// program.img.addr = mlx_get_data_addr(program.img.mlx_img, &program.img.bpp, &program.img.line_len, &program.img.endian);
 
 	// mlx_key_hook(program.win, &key_handler, &program);
+	draw_map(&program, width, height);
 	mlx_mouse_hook(program.win, &mouse_handler, &program);
 	mlx_hook(program.win, 6, 1L<<6, mouse_movement_handler, &program);
 	mlx_loop_hook(program.mlx, &render, &program);
