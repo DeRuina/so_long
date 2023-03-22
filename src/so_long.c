@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/22 11:40:42 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/22 14:52:13 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct player
 	int pixel_player_x;
 	void *player_image;
 	void *exit_image;
+	void *tile_image;
+	void *exit_granted;
 	int pixel_exit_y;
 	int pixel_exit_x;
 }			t_player;
@@ -67,15 +69,91 @@ void img_pix_put(t_img *img, int x, int y, int color)
 
 int key_handler(int key, t_program *program)
 {
+	int flag;
+
+	flag = 4;
+	if (program->player.collect == 0)
+		flag = 1;
 	if (key == ESC)
 		exit(EXIT_SUCCESS);
 	if (key == DOWN && program->map_2d[program->player.y + 1 ][program->player.x] != 1)
 	{
+		ft_printf("%d\n", flag);
+		if (program->map_2d[program->player.y + 1 ][program->player.x] != flag)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
+			program->player.y++;
+			program->player.pixel_player_y += 96;
+			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+		}
+		if (program->map_2d[program->player.y][program->player.x] == 3)
+		{
+			program->player.collect--;
+			program->map_2d[program->player.y][program->player.x] = 0;
+		}
 
-		program->player.y++;
-		program->player.pixel_player_y += 96;
-		// mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_exit_y);
 	}
+	if (key == UP && program->map_2d[program->player.y - 1 ][program->player.x] != 1)
+	{
+		ft_printf("%d\n", flag);
+		if (program->map_2d[program->player.y - 1 ][program->player.x] != flag)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
+			program->player.y--;
+			program->player.pixel_player_y -= 96;
+			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+		}
+		if (program->map_2d[program->player.y][program->player.x] == 3)
+		{
+			program->player.collect--;
+			program->map_2d[program->player.y][program->player.x] = 0;
+		}
+
+
+
+
+	}
+	if (key == RIGHT && program->map_2d[program->player.y][program->player.x + 1] != 1)
+	{
+		ft_printf("%d\n", flag);
+		if (program->map_2d[program->player.y][program->player.x + 1] != flag)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
+			program->player.x++;
+			program->player.pixel_player_x += 96;
+			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+		}
+		if (program->map_2d[program->player.y][program->player.x] == 3)
+		{
+			program->player.collect--;
+			program->map_2d[program->player.y][program->player.x] = 0;
+		}
+		/
+
+
+	}
+	if (key == LEFT && program->map_2d[program->player.y][program->player.x - 1] != 1)
+	{
+		ft_printf("%d\n", flag);
+		if (program->map_2d[program->player.y][program->player.x - 1] != flag)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
+			program->player.x--;
+			program->player.pixel_player_x -= 96;
+			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+		}
+		if (program->map_2d[program->player.y][program->player.x] == 3)
+		{
+			program->player.collect--;
+			program->map_2d[program->player.y][program->player.x] = 0;
+		}
+
+
+	}
+	if (program->player.collect == 0)
+			mlx_put_image_to_window(program->mlx, program->win, program->player.exit_granted, program->player.pixel_exit_x, program->player.pixel_exit_y);
+	if (program->map_2d[program->player.y][program->player.x] == 4)
+		exit(EXIT_SUCCESS);
 
 
 
@@ -305,6 +383,8 @@ void draw_P_and_E(t_program **program)
 	mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.player_image, (*program)->player.pixel_player_x, (*program)->player.pixel_player_y);
 	(*program)->player.exit_image = mlx_xpm_file_to_image((*program)->mlx, "./img/burn_door.xpm", &(*program)->width, &(*program)->elevation);
 	mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.exit_image, (*program)->player.pixel_exit_x, (*program)->player.pixel_exit_y);
+	(*program)->player.tile_image = mlx_xpm_file_to_image((*program)->mlx, "./img/grass2.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.exit_granted = mlx_xpm_file_to_image((*program)->mlx, "./img/door1.xpm", &(*program)->width, &(*program)->elevation);
 }
 
 int render(t_program *program)
@@ -318,9 +398,9 @@ int render(t_program *program)
 	// mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
 	// program->player.exit_image = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &program->width, &program->elevation);
 	// mlx_put_image_to_window(program->mlx, program->win, program->player.exit_image, program->player.pixel_exit_x, program->player.pixel_exit_y);
-	mlx_key_hook(program->win, &key_handler, &program);
-	mlx_mouse_hook(program->win, &mouse_handler, &program);
-	mlx_hook(program->win, 6, 1L<<6, mouse_movement_handler, &program);
+	mlx_key_hook(program->win, &key_handler, program);
+	mlx_mouse_hook(program->win, &mouse_handler, program);
+	mlx_hook(program->win, 6, 1L<<6, mouse_movement_handler, program);
 	return (0);
 }
 
@@ -352,6 +432,7 @@ int	so_long(int x, int y, char *map)
 
 	draw_map(program, (*program).width, (*program).elevation);
 	draw_P_and_E(&program);
+	key_handler(0, program);
 	// mlx_mouse_hook(program.win, &mouse_handler, &program);
 	// mlx_hook(program.win, 6, 1L<<6, mouse_movement_handler, &program);
 	mlx_loop_hook((*program).mlx, &render, program);
