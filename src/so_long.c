@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/22 14:52:13 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/22 15:41:48 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,9 @@ int key_handler(int key, t_program *program)
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.y++;
 			program->player.pixel_player_y += 96;
+			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
 		}
-		if (program->map_2d[program->player.y][program->player.x] == 3)
-		{
-			program->player.collect--;
-			program->map_2d[program->player.y][program->player.x] = 0;
-		}
-
 	}
 	if (key == UP && program->map_2d[program->player.y - 1 ][program->player.x] != 1)
 	{
@@ -101,17 +96,9 @@ int key_handler(int key, t_program *program)
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.y--;
 			program->player.pixel_player_y -= 96;
+			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
 		}
-		if (program->map_2d[program->player.y][program->player.x] == 3)
-		{
-			program->player.collect--;
-			program->map_2d[program->player.y][program->player.x] = 0;
-		}
-
-
-
-
 	}
 	if (key == RIGHT && program->map_2d[program->player.y][program->player.x + 1] != 1)
 	{
@@ -121,16 +108,9 @@ int key_handler(int key, t_program *program)
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.x++;
 			program->player.pixel_player_x += 96;
+			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
 		}
-		if (program->map_2d[program->player.y][program->player.x] == 3)
-		{
-			program->player.collect--;
-			program->map_2d[program->player.y][program->player.x] = 0;
-		}
-		/
-
-
 	}
 	if (key == LEFT && program->map_2d[program->player.y][program->player.x - 1] != 1)
 	{
@@ -140,16 +120,15 @@ int key_handler(int key, t_program *program)
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.x--;
 			program->player.pixel_player_x -= 96;
+			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
 		}
-		if (program->map_2d[program->player.y][program->player.x] == 3)
+	}
+	if (program->map_2d[program->player.y][program->player.x] == 3)
 		{
 			program->player.collect--;
 			program->map_2d[program->player.y][program->player.x] = 0;
 		}
-
-
-	}
 	if (program->player.collect == 0)
 			mlx_put_image_to_window(program->mlx, program->win, program->player.exit_granted, program->player.pixel_exit_x, program->player.pixel_exit_y);
 	if (program->map_2d[program->player.y][program->player.x] == 4)
