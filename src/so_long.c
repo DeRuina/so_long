@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/22 15:41:48 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/22 15:48:25 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,10 +274,6 @@ void draw_map(t_program *program, int width, int height)
 				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/tree2.xpm", &width, &height);
 			else if (program->map_2d[j][k] == 3)
 				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
-			// else if (program->map_2d[j][k] == 4)
-			// 	map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
-			// else if (program->map_2d[j][k] == 2)
-			// 	map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
 			else
 				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
 		}
