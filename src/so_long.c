@@ -6,11 +6,33 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/21 15:45:04 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/22 11:40:42 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+#define ESC 53
+#define UP 126
+#define DOWN 125
+#define RIGHT 124
+#define LEFT 123
+#define SHOOT 49
+
+typedef struct player
+{
+	int y;
+	int x;
+	int exit_y;
+	int exit_x;
+	int collect;
+	int pixel_player_y;
+	int pixel_player_x;
+	void *player_image;
+	void *exit_image;
+	int pixel_exit_y;
+	int pixel_exit_x;
+}			t_player;
 
 typedef struct s_img
 {
@@ -21,7 +43,7 @@ typedef struct s_img
 	int		endian;
 }	t_img;
 
-typedef struct  s_program
+typedef struct program
 	{
     	void *mlx;
    		void *win;
@@ -30,7 +52,11 @@ typedef struct  s_program
 		int lenght;
 		char *map;
 		int **map_2d;
-	}               t_program;
+		int width;
+		int elevation;
+		int row_len;
+		t_player player;
+	}          t_program;
 
 void img_pix_put(t_img *img, int x, int y, int color)
 {
@@ -39,23 +65,20 @@ void img_pix_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)pixel = color;
 }
 
-int key_handler(int key, t_program *temp)
+int key_handler(int key, t_program *program)
 {
-	int i;
-
-
-
-	i = 100;
-	if (key == 124)
+	if (key == ESC)
+		exit(EXIT_SUCCESS);
+	if (key == DOWN && program->map_2d[program->player.y + 1 ][program->player.x] != 1)
 	{
-	 while (i-- != 0)
-		img_pix_put(&temp->img, i, 100, 0x2E9E2A);
+
+		program->player.y++;
+		program->player.pixel_player_y += 96;
+		// mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_exit_y);
 	}
-	if (key == 125)
-	{
-	while (i++ != 200)
-		img_pix_put(&temp->img, 50, i, 0x2E9E2A);
-	}
+
+
+
 	return (0);
 }
 
@@ -150,20 +173,19 @@ void draw_base(t_program *program, int width, int height)
 	int 	k;
 	int		x;
 	int 	y;
-	int		row_len;
 	void 	*temp;
 
 	j = -1;
 	k = -1;
 	x = 0;
 	y = 0;
-	row_len = check_rows_lenght(program->map,1) - 1;
 	while (program->map_2d[++j] != 0)
 	{
-		while (++k < row_len)
+		while (++k < program->row_len)
 		{
 			temp = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
 			mlx_put_image_to_window(program->mlx, program->win, temp, x, y);
+			free(temp);
 			x += 96;
 		}
 		x = 0;
@@ -179,28 +201,26 @@ void draw_map(t_program *program, int width, int height)
 	int		j;
 	int 	k;
 	void	*map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1)) + 1];
-	int		row_len;
 
 
 	draw_base(program, width, height);
 	i = -1;
 	j = -1;
 	k = -1;
-	row_len = check_rows_lenght(program->map,1) - 1;
 	map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1))] = 0;
 	i = 0;
 	while (program->map_2d[++j] != 0)
 	{
-		while (++k < row_len)
+		while (++k < program->row_len)
 		{
 			if (program->map_2d[j][k] == 1)
 				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/tree2.xpm", &width, &height);
 			else if (program->map_2d[j][k] == 3)
 				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
-			else if (program->map_2d[j][k] == 4)
-				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
-			else if (program->map_2d[j][k] == 2)
-				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
+			// else if (program->map_2d[j][k] == 4)
+			// 	map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
+			// else if (program->map_2d[j][k] == 2)
+			// 	map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
 			else
 				map_tiles[i++] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
 		}
@@ -212,71 +232,129 @@ void draw_map(t_program *program, int width, int height)
 
 	while (map_tiles[i] != NULL)
 	{
-		while (row_len-- != 0)
+		while (program->row_len-- != 0)
 		{
 			mlx_put_image_to_window(program->mlx, program->win, map_tiles[i++], k, j);
 			k += 96;
 		}
 		k = 0;
 		j += 96;
-		row_len = check_rows_lenght(program->map,1) - 1;
+		program->row_len = check_rows_lenght(program->map,1) - 1;
 	}
 
 }
 
+t_player player_init(t_program *program)
+{
+	t_player player;
+	int i;
+	int j;
+
+	i = -1;
+	j = -1;
+	player.collect = 0;
+	player.pixel_exit_x = 0;
+	player.pixel_exit_y = 0;
+	player.pixel_player_x = 0;
+	player.pixel_player_y = 0;
+	player.x = -1;
+	player.y = -1;
+	player.exit_x = -1;
+	player.exit_y = -1;
+	while (program->map_2d[++i] != 0)
+	{
+		while (++j < program->row_len)
+		{
+			if (program->map_2d[i][j] == 2)
+			{
+				player.y = i;
+				player.x = j;
+			}
+			if (program->map_2d[i][j] == 3)
+				player.collect++;
+			if (program->map_2d[i][j] == 4)
+			{
+				player.exit_y = i;
+				player.exit_x = j;
+			}
+			if (player.x == -1)
+				player.pixel_player_x += 96;
+			if (player.exit_x == -1)
+				player.pixel_exit_x += 96;
+		}
+		if (player.x == -1)
+		{
+			player.pixel_player_x = 0;
+			player.pixel_player_y += 96;
+		}
+		if (player.exit_x == -1)
+		{
+			player.pixel_exit_x = 0;
+			player.pixel_exit_y += 96;
+		}
+		j = -1;
+
+	}
+	return (player);
+}
+
+void draw_P_and_E(t_program **program)
+{
+	(*program)->player = player_init((*program));
+	(*program)->player.player_image = mlx_xpm_file_to_image((*program)->mlx, "./img/basic96.xpm", &(*program)->width, &(*program)->elevation);
+	mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.player_image, (*program)->player.pixel_player_x, (*program)->player.pixel_player_y);
+	(*program)->player.exit_image = mlx_xpm_file_to_image((*program)->mlx, "./img/burn_door.xpm", &(*program)->width, &(*program)->elevation);
+	mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.exit_image, (*program)->player.pixel_exit_x, (*program)->player.pixel_exit_y);
+}
+
 int render(t_program *program)
 {
-	// t_img image;
-	int width;
-	int height;
-
-	width = 96;
-	height = 96;
-	// t_img image2;
 
 	if (program->win == NULL)
 		return (1);
-	// p2->mlx = program->mlx;
-	// p2->win = program->win;
-	// image2 = create_image(program, program->lenght, program->height);
-	// render_background(&image2, 0x76B947, program->lenght, program->height);
-	// mlx_put_image_to_window(program->mlx, program->win, image2.mlx_img, 0, 0);
-	// program->img.mlx_img = mlx_xpm_file_to_image(program->mlx, "./img/hive1.xpm", &program
-	// ->lenght, &program->height);
-	// mlx_put_image_to_window(program->mlx, program->win, program->img.mlx_img, 0, 0);
-	// image = create_image(program, i, j);
-	// render_background(&image, 0xE8F70E, i, j);
-	// image.mlx_img = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
-	// mlx_put_image_to_window(program->mlx, program->win, image.mlx_img, 192, 384);
 
-
+	// program->player = player_init(program);
+	// program->player.player_image = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &program->width, &program->elevation);
+	// mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+	// program->player.exit_image = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &program->width, &program->elevation);
+	// mlx_put_image_to_window(program->mlx, program->win, program->player.exit_image, program->player.pixel_exit_x, program->player.pixel_exit_y);
+	mlx_key_hook(program->win, &key_handler, &program);
+	mlx_mouse_hook(program->win, &mouse_handler, &program);
+	mlx_hook(program->win, 6, 1L<<6, mouse_movement_handler, &program);
 	return (0);
+}
+
+t_program *program_init(int x, int y, char *map)
+{
+	t_program *program;
+
+	program = malloc( sizeof(t_program));
+	program->width = 96;
+	program->elevation = 96;
+
+	program->lenght = x;
+	program->height = y;
+	program->map = map;
+	program->map_2d = read_map_to_nbr(map);
+	program->row_len = check_rows_lenght(program->map,1) - 1;
+	program->mlx  = mlx_init();
+	program->win = mlx_new_window(program->mlx, program->lenght, program->height, "so long");
+	return (program);
 }
 
 int	so_long(int x, int y, char *map)
 {
 
-	t_program program;
-	int width;
-	int height;
+	t_program *program;
 
-	width = 96;
-	height = 96;
+	program = program_init(x, y, map);
 
-	program.lenght = x;
-	program.height = y;
-	program.map = map;
-	program.map_2d = read_map_to_nbr(map);
-	program.mlx  = mlx_init();
-	program.win = mlx_new_window(program.mlx, program.lenght, program.height, "so long");
-	// program.img.mlx_img = mlx_new_image(program.mlx, 1000, 1000);
-	// program.img.addr = mlx_get_data_addr(program.img.mlx_img, &program.img.bpp, &program.img.line_len, &program.img.endian);
 
-	// mlx_key_hook(program.win, &key_handler, &program);
-	draw_map(&program, width, height);
-	mlx_mouse_hook(program.win, &mouse_handler, &program);
-	mlx_hook(program.win, 6, 1L<<6, mouse_movement_handler, &program);
-	mlx_loop_hook(program.mlx, &render, &program);
-	mlx_loop(program.mlx);
+	draw_map(program, (*program).width, (*program).elevation);
+	draw_P_and_E(&program);
+	// mlx_mouse_hook(program.win, &mouse_handler, &program);
+	// mlx_hook(program.win, 6, 1L<<6, mouse_movement_handler, &program);
+	mlx_loop_hook((*program).mlx, &render, program);
+	mlx_loop((*program).mlx);
 	return (0);
 }

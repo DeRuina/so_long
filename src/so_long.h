@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/21 09:55:16 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/22 11:02:10 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 # include "../Libft/src/libft.h"
 # include "mlx.h"
 # include <fcntl.h>
+# define ESC_MAC 53
+# define UP 126
+# define DOWN 125
+# define RIGHT 124
+# define LEFT 123
+# define SHOOT 49
 
 typedef enum bool
 {
