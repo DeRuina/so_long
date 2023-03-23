@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/03/17 10:59:10 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/23 14:08:30 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,19 @@ bool	is_a_path(char *map_lines[], int i, int j, int *visited_block[])
 	return (false);
 }
 
-void free_arrays(char *array[], int *array_int[])
+void free_arrays(char *array[], int *array_int[], int rows)
 {
 	int i;
 
 	i = -1;
 	if (array_int == NULL)
 	{
-	while (array[i++] != '\0')
+	while (i++ < rows)
 		free(array[i]);
 	}
 	if (array == NULL)
 	{
-		while (array_int[i++] != '\0')
+		while (array_int[i++] != 0)
 		free(array_int[i]);
 	}
 }
@@ -115,11 +115,10 @@ bool	check_path_recursion(char *map_lines[], int rows, int lenght, int amount)
 				while (amount-- != 0)
 				{
 					if (is_a_path(map_lines, i, j, visited_block) == true)
-					{
-						flag = true;
-						if (amount == 0)
-							free_arrays(NULL, visited_block);
-					}
+						{
+							flag = true;
+							free_arrays(NULL, visited_block, 0);
+						}
 					else
 						flag = false;
 				}
@@ -130,7 +129,7 @@ bool	check_path_recursion(char *map_lines[], int rows, int lenght, int amount)
 		i++;
 	}
 	if (flag == false)
-		free_arrays(NULL, visited_block);
+		free_arrays(NULL, visited_block, 0);
 	return (flag);
 }
 
@@ -166,7 +165,7 @@ int	check_valid_path(char *map, int rows, char *item, int amount)
 	map_lines[0] = join_and_free_item_and_amount(item, amount, NULL);
 	if (check_path_recursion(map_lines, rows, ft_strlen(map_lines[1]), amount) == false)
 		answer = -1;
-	free_arrays(map_lines, NULL);
+	free_arrays(map_lines, NULL, rows);
 	return (answer);
 
 }

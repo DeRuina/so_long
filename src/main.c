@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:55:42 by druina            #+#    #+#             */
-/*   Updated: 2023/03/20 11:10:29 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/23 14:02:55 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,5 @@ int	main(int argc, char **argv)
 	if (check_map_content(argv[1]) == -1)
 		return (ft_printf("Error: map invalid\n"));
 	so_long((check_rows_lenght(argv[1], 1) - 1)* 96, map_rows(argv[1]) * 96, argv[1]);
-	return (EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }

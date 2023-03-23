@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/22 15:48:25 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/23 14:11:44 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,53 +19,7 @@
 #define LEFT 123
 #define SHOOT 49
 
-typedef struct player
-{
-	int y;
-	int x;
-	int exit_y;
-	int exit_x;
-	int collect;
-	int pixel_player_y;
-	int pixel_player_x;
-	void *player_image;
-	void *exit_image;
-	void *tile_image;
-	void *exit_granted;
-	int pixel_exit_y;
-	int pixel_exit_x;
-}			t_player;
 
-typedef struct s_img
-{
-	void	*mlx_img;
-	char	*addr;
-	int		bpp; /* bits per pixel */
-	int		line_len;
-	int		endian;
-}	t_img;
-
-typedef struct program
-	{
-    	void *mlx;
-   		void *win;
-		t_img img;
-		int height;
-		int lenght;
-		char *map;
-		int **map_2d;
-		int width;
-		int elevation;
-		int row_len;
-		t_player player;
-	}          t_program;
-
-void img_pix_put(t_img *img, int x, int y, int color)
-{
-	char *pixel;
-	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	*(unsigned int *)pixel = color;
-}
 
 int key_handler(int key, t_program *program)
 {
@@ -139,14 +93,13 @@ int key_handler(int key, t_program *program)
 	return (0);
 }
 
-int mouse_handler(int key, void *param)
+int mouse_handler(int key, t_program *program)
 {
 
 
-	param = NULL;
+	program = NULL;
 	if (key == 1)
 	{
-		ft_printf("BOOM\n");
 		exit(0);
 	}
 	if (key == 2)
@@ -160,29 +113,6 @@ int mouse_movement_handler(int x, int y)
 	return(0);
 }
 
-void	render_background(t_img *img, int color, int x, int y)
-	{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < y)
-	{
-		j = 0;
-		while (j < x)
-			img_pix_put(img, j++, i, color);
-		++i;
-	}
-	}
-
-t_img create_image(t_program *program, int x, int y)
-{
-	t_img image;
-
-	image.mlx_img = mlx_new_image(program->mlx, x, y);
-	image.addr= mlx_get_data_addr(image.mlx_img, &image.bpp, &image.line_len, &image.endian);
-	return (image);
-}
 
 int **read_map_to_nbr(char *map)
 {
@@ -196,7 +126,7 @@ int **read_map_to_nbr(char *map)
 	k = -1;
 	i = -1;
 	map_lines_nbr = malloc((map_rows(map) + 1) * sizeof(int *));
-	while (++i < (map_rows(map) + 1))
+	while (++i < (map_rows(map)))
 		map_lines_nbr[i] = malloc((check_rows_lenght(map, 1) - 1) * sizeof(int));
 	map_lines[map_rows(map)] = 0;
 	map_lines_nbr[map_rows(map)] = 0;
@@ -220,7 +150,7 @@ int **read_map_to_nbr(char *map)
 		}
 		k = -1;
 	}
-	free_arrays(map_lines, NULL);
+	free_arrays(map_lines, NULL, map_rows(map));
 	return (map_lines_nbr);
 }
 
@@ -386,7 +316,6 @@ t_program *program_init(int x, int y, char *map)
 	program = malloc( sizeof(t_program));
 	program->width = 96;
 	program->elevation = 96;
-
 	program->lenght = x;
 	program->height = y;
 	program->map = map;
@@ -397,6 +326,16 @@ t_program *program_init(int x, int y, char *map)
 	return (program);
 }
 
+// void	free_program(t_program *program)
+// {
+// 	// free_arrays(NULL, program->map_2d);
+// 	// mlx_destroy_window(program->mlx, program->win);
+// 	// free(program->mlx);
+// 	// // free(program->win);
+// 	free(program);
+// 	// exit(EXIT_SUCCESS);
+// }
+
 int	so_long(int x, int y, char *map)
 {
 
@@ -405,12 +344,14 @@ int	so_long(int x, int y, char *map)
 	program = program_init(x, y, map);
 
 
-	draw_map(program, (*program).width, (*program).elevation);
+
+
+	// draw_map(program, (*program).width, (*program).elevation);
 	draw_P_and_E(&program);
-	key_handler(0, program);
-	// mlx_mouse_hook(program.win, &mouse_handler, &program);
-	// mlx_hook(program.win, 6, 1L<<6, mouse_movement_handler, &program);
+	// key_handler(0, program);
+	mlx_mouse_hook(program->win, &mouse_handler, program);
+	// // mlx_hook(program.win, 6, 1L<<6, mouse_movement_handler, &program);
 	mlx_loop_hook((*program).mlx, &render, program);
 	mlx_loop((*program).mlx);
-	return (0);
+	exit(0);
 }
