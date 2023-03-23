@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/03/23 14:08:30 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/23 14:21:47 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ bool	check_path_recursion(char *map_lines[], int rows, int lenght, int amount)
 					if (is_a_path(map_lines, i, j, visited_block) == true)
 						{
 							flag = true;
-							free_arrays(NULL, visited_block, 0);
+							if (amount == 0)
+								free_arrays(NULL, visited_block, 0);
 						}
 					else
 						flag = false;
