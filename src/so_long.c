@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/23 14:11:44 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/23 15:46:50 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,27 +159,32 @@ void draw_base(t_program *program, int width, int height)
 	int		j;
 	int 	k;
 	int		x;
-	int 	y;
-	void 	*temp;
+	void	*map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1)) + 1];
 
 	j = -1;
 	k = -1;
 	x = 0;
-	y = 0;
+	map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1))] = 0;
 	while (program->map_2d[++j] != 0)
 	{
 		while (++k < program->row_len)
-		{
-			temp = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
-			mlx_put_image_to_window(program->mlx, program->win, temp, x, y);
-			free(temp);
-			x += 96;
-		}
-		x = 0;
-		y += 96;
+			map_tiles[x++] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
 		k = -1;
 	}
-
+	j = 0;
+	k = 0;
+	x = 0;
+	while (map_tiles[x] != NULL)
+	{
+		while (program->row_len-- != 0)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, map_tiles[x++], k, j);
+			k += 96;
+		}
+		k = 0;
+		j += 96;
+		program->row_len = check_rows_lenght(program->map,1) - 1;
+	}
 }
 
 void draw_map(t_program *program, int width, int height)
@@ -191,7 +196,6 @@ void draw_map(t_program *program, int width, int height)
 
 
 	draw_base(program, width, height);
-	i = -1;
 	j = -1;
 	k = -1;
 	map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1))] = 0;
@@ -346,7 +350,7 @@ int	so_long(int x, int y, char *map)
 
 
 
-	// draw_map(program, (*program).width, (*program).elevation);
+	draw_map(program, (*program).width, (*program).elevation);
 	draw_P_and_E(&program);
 	// key_handler(0, program);
 	mlx_mouse_hook(program->win, &mouse_handler, program);
