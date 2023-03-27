@@ -6,18 +6,18 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/23 15:46:50 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/27 14:28:52 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-#define ESC 53
-#define UP 126
-#define DOWN 125
-#define RIGHT 124
-#define LEFT 123
-#define SHOOT 49
+#define ESC 9
+#define UP 111
+#define DOWN 116
+#define RIGHT 114
+#define LEFT 113
+#define SHOOT 65
 
 
 
@@ -97,7 +97,7 @@ int mouse_handler(int key, t_program *program)
 {
 
 
-	program = NULL;
+	program->mlx = NULL;
 	if (key == 1)
 	{
 		exit(0);
@@ -307,9 +307,10 @@ int render(t_program *program)
 	// mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
 	// program->player.exit_image = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &program->width, &program->elevation);
 	// mlx_put_image_to_window(program->mlx, program->win, program->player.exit_image, program->player.pixel_exit_x, program->player.pixel_exit_y);
-	mlx_key_hook(program->win, &key_handler, program);
+	// mlx_key_hook(program->win, &key_handler, program);
+	mlx_hook(program->win, 3, 1L<<1, &key_handler, program);
 	mlx_mouse_hook(program->win, &mouse_handler, program);
-	mlx_hook(program->win, 6, 1L<<6, mouse_movement_handler, program);
+	mlx_hook(program->win, 6, 1L<<6, &mouse_movement_handler, program);
 	return (0);
 }
 
@@ -340,22 +341,77 @@ t_program *program_init(int x, int y, char *map)
 // 	// exit(EXIT_SUCCESS);
 // }
 
+void draw_map_bigger_than_screen(t_program *program, int width, int height)
+{
+	int		i;
+	int		j;
+	int 	k;
+	int 	l;
+	void	*map_tiles[map_rows(program->map) + 1][(check_rows_lenght(program->map,1) - 1)];
+
+
+	draw_base(program, width, height);
+	j = -1;
+	k = -1;
+	map_tiles[map_rows(program->map)][0] = 0;
+	i = 0;
+	while (program->map_2d[++j] != 0)
+	{
+		while (++k < program->row_len)
+		{
+			if (program->map_2d[j][k] == 1)
+				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/tree2.xpm", &width, &height);
+			else if (program->map_2d[j][k] == 3)
+				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
+			else
+				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
+		}
+		k = -1;
+	}
+	i = -1;
+	j = 0;
+	k = 0;
+	l = -1;
+	while (++i < map_rows(program->map))
+	{
+		while (++l < program->row_len)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, map_tiles[i][l], k, j);
+			k += 96;
+		}
+		k = 0;
+		j += 96;
+		l = -1;
+	}
+}
+
 int	so_long(int x, int y, char *map)
 {
 
 	t_program *program;
+	bool flag;
 
+	if (x > 800 || y > 800)
+	{
+		if (x > 800)
+			x = 800;
+		if (y > 800)	
+			y = 800;
+		flag = true;
+	}
+	flag = false;
 	program = program_init(x, y, map);
-
-
-
-
-	draw_map(program, (*program).width, (*program).elevation);
+	if (flag == true)
+		draw_map_bigger_than_screen(program, (*program).width, (*program).elevation);
+	else
+		draw_map(program, (*program).width, (*program).elevation);
 	draw_P_and_E(&program);
 	// key_handler(0, program);
-	mlx_mouse_hook(program->win, &mouse_handler, program);
-	// // mlx_hook(program.win, 6, 1L<<6, mouse_movement_handler, &program);
-	mlx_loop_hook((*program).mlx, &render, program);
+	// mlx_mouse_hook(program->win, &mouse_handler, program);
+	// mlx_hook(program->win, 4, 1L<<2, mouse_handler, program);
+	// mlx_hook(program->win, 2, 1L<<0, key_handler, program);
+	// mlx_hook(program->win, 6, 1L<<6, mouse_movement_handler, &program);
+	// mlx_loop_hook((*program).mlx, &render, program);
 	mlx_loop((*program).mlx);
 	exit(0);
 }

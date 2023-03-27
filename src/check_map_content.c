@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/03/23 14:20:58 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/26 15:03:03 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void	check_P_E_locations(int *location_x, int *location_y, char *map_lines[],
 	arr[1] = '\0';
 	i = 0;
 	j = 0;
-	while (map_lines[j] != '\0')
+	while (map_lines[j] != 0)
 	{
 		while (map_lines[j][i] != '\n')
 		{

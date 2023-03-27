@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/03/23 14:21:47 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/26 15:03:26 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	check_boundaries(char *map_lines[] , int i, int j)
 	k = 0;
 	x = -1;
 	y = ft_strlen(map_lines[1]);
-	while (map_lines[k++] != '\0')
+	while (map_lines[k++] != 0)
 		x++;
 	if (i >= 0 && i <= x &&  j >= 0 && j <= y)
 		return (true);
