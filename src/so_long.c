@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/27 14:28:52 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/27 15:02:55 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,12 +159,12 @@ void draw_base(t_program *program, int width, int height)
 	int		j;
 	int 	k;
 	int		x;
-	void	*map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1)) + 1];
+	void	*map_tiles[(program->rows * program->row_len) + 1];
 
 	j = -1;
 	k = -1;
 	x = 0;
-	map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1))] = 0;
+	map_tiles[program->rows * program->row_len] = 0;
 	while (program->map_2d[++j] != 0)
 	{
 		while (++k < program->row_len)
@@ -192,13 +192,13 @@ void draw_map(t_program *program, int width, int height)
 	int		i;
 	int		j;
 	int 	k;
-	void	*map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1)) + 1];
+	void	*map_tiles[(program->rows * program->row_len) + 1];
 
 
 	draw_base(program, width, height);
 	j = -1;
 	k = -1;
-	map_tiles[(map_rows(program->map) * (check_rows_lenght(program->map,1) - 1))] = 0;
+	map_tiles[program->rows * program->row_len] = 0;
 	i = 0;
 	while (program->map_2d[++j] != 0)
 	{
@@ -326,6 +326,7 @@ t_program *program_init(int x, int y, char *map)
 	program->map = map;
 	program->map_2d = read_map_to_nbr(map);
 	program->row_len = check_rows_lenght(program->map,1) - 1;
+	program->rows = map_rows(program->map);
 	program->mlx  = mlx_init();
 	program->win = mlx_new_window(program->mlx, program->lenght, program->height, "so long");
 	return (program);
@@ -347,13 +348,13 @@ void draw_map_bigger_than_screen(t_program *program, int width, int height)
 	int		j;
 	int 	k;
 	int 	l;
-	void	*map_tiles[map_rows(program->map) + 1][(check_rows_lenght(program->map,1) - 1)];
+	void	*map_tiles[program->rows + 1][program->row_len - 1];
 
 
 	draw_base(program, width, height);
 	j = -1;
 	k = -1;
-	map_tiles[map_rows(program->map)][0] = 0;
+	map_tiles[program->rows][0] = 0;
 	i = 0;
 	while (program->map_2d[++j] != 0)
 	{
@@ -372,7 +373,7 @@ void draw_map_bigger_than_screen(t_program *program, int width, int height)
 	j = 0;
 	k = 0;
 	l = -1;
-	while (++i < map_rows(program->map))
+	while (++i < program->rows)
 	{
 		while (++l < program->row_len)
 		{
@@ -391,12 +392,12 @@ int	so_long(int x, int y, char *map)
 	t_program *program;
 	bool flag;
 
-	if (x > 800 || y > 800)
+	if (x > 960 || y > 960)
 	{
-		if (x > 800)
-			x = 800;
-		if (y > 800)	
-			y = 800;
+		if (x > 960)
+			x = 960;
+		if (y > 960)	
+			y = 960;
 		flag = true;
 	}
 	flag = false;

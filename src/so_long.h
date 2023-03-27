@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/23 13:32:54 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/27 14:49:12 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@
 # include "../Libft/src/libft.h"
 # include "mlx.h"
 # include <fcntl.h>
-# define ESC_MAC 53
-# define UP 126
-# define DOWN 125
-# define RIGHT 124
-# define LEFT 123
-# define SHOOT 49
+#define ESC 9
+#define UP 111
+#define DOWN 116
+#define RIGHT 114
+#define LEFT 113
+#define SHOOT 65
+
 
 typedef enum bool
 {
@@ -70,6 +71,7 @@ typedef struct program
 	int			width;
 	int			elevation;
 	int			row_len;
+	int			rows;
 	t_player	player;
 }				t_program;
 
