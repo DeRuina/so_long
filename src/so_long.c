@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/28 11:12:41 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/28 11:20:41 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,21 +328,11 @@ t_program *program_init(int x, int y, char *map)
 	return (program);
 }
 
-// void	free_program(t_program *program)
-// {
-// 	// free_arrays(NULL, program->map_2d);
-// 	// mlx_destroy_window(program->mlx, program->win);
-// 	// free(program->mlx);
-// 	// // free(program->win);
-// 	free(program);
-// 	// exit(EXIT_SUCCESS);
-// }
 void ***draw_map(t_program *program, int width, int height)
 {
 	int		i;
 	int		j;
 	int 	k;
-	int 	l;
 	void ***map_tiles;
 
 	map_tiles = (void ***)malloc((program->rows + 1) * sizeof(void ***));
@@ -369,6 +359,18 @@ void ***draw_map(t_program *program, int width, int height)
 		}
 		k = -1;
 	}
+
+	print_map(program, map_tiles);
+	return(map_tiles);
+}
+
+void print_map(t_program *program, void ***map_tiles)
+{
+	int i;
+	int j;
+	int k ;
+	int l;
+
 	i = -1;
 	j = 0;
 	k = 0;
@@ -388,7 +390,6 @@ void ***draw_map(t_program *program, int width, int height)
 		j += 96;
 		l = -1;
 	}
-	return(map_tiles);
 }
 
 int	so_long(int x, int y, char *map)
@@ -405,13 +406,10 @@ int	so_long(int x, int y, char *map)
 	}
 
 	program = program_init(x, y, map);
-	// if (flag == true)
-		program->map_print_big = draw_map(program, (*program).width, (*program).elevation);
-	// else
-	// 	draw_map(program, (*program).width, (*program).elevation);
+	program->map_print_big = draw_map(program, (*program).width, (*program).elevation);
 	draw_P_and_E(&program);
 	// key_handler(0, program);
-	mlx_mouse_hook(program->win, &mouse_handler, program);
+	// mlx_mouse_hook(program->win, &mouse_handler, program);
 	// // mlx_hook(program.win, 6, 1L<<6, mouse_movement_handler, &program);
 	mlx_loop_hook((*program).mlx, &render, program);
 	mlx_loop((*program).mlx);
