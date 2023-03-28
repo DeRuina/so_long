@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/28 10:56:38 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/28 11:12:28 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ char			*join_and_free_item_and_amount(char *item, int amount,
 					char *line);
 int				**read_map_to_nbr(char *map);
 void			free_program(t_program *program);
-void			***draw_map_bigger_than_screen(t_program *program, int width,
-					int height);
+void			***draw_map(t_program *program, int width, int height);
 
 #endif
