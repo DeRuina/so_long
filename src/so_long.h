@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/28 09:12:50 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/28 10:56:38 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct program
 	int			elevation;
 	int			row_len;
 	int			rows;
+	void		***map_print_big;
 	t_player	player;
 }				t_program;
 
@@ -98,7 +99,7 @@ char			*join_and_free_item_and_amount(char *item, int amount,
 					char *line);
 int				**read_map_to_nbr(char *map);
 void			free_program(t_program *program);
-void			draw_map_bigger_than_screen(t_program *program, int width,
+void			***draw_map_bigger_than_screen(t_program *program, int width,
 					int height);
 
 #endif

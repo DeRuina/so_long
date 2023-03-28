@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/28 09:12:27 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/28 11:02:40 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,6 +326,7 @@ t_program *program_init(int x, int y, char *map)
 	program->map_2d = read_map_to_nbr(map);
 	program->row_len = check_rows_lenght(program->map,1) - 1;
 	program->rows = map_rows(program->map);
+	program->map_print_big = NULL;
 	program->mlx  = mlx_init();
 	program->win = mlx_new_window(program->mlx, program->lenght, program->height, "so long");
 	return (program);
@@ -340,19 +341,24 @@ t_program *program_init(int x, int y, char *map)
 // 	free(program);
 // 	// exit(EXIT_SUCCESS);
 // }
-void draw_map_bigger_than_screen(t_program *program, int width, int height)
+void ***draw_map_bigger_than_screen(t_program *program, int width, int height)
 {
 	int		i;
 	int		j;
 	int 	k;
 	int 	l;
-	void	*map_tiles[program->rows + 1][program->row_len - 1];
+	void ***map_tiles;
 
+	map_tiles = (void ***)malloc((program->rows + 1) * sizeof(void ***));
 
 	draw_base(program, width, height);
 	j = -1;
 	k = -1;
-	map_tiles[program->rows][0] = 0;
+	while (++k < program->rows )
+		map_tiles[k] = (void **)malloc((program->row_len - 1) * sizeof(void **));
+
+	k = -1;
+	map_tiles[program->rows] = NULL;
 	i = 0;
 	while (program->map_2d[++j] != 0)
 	{
@@ -386,6 +392,7 @@ void draw_map_bigger_than_screen(t_program *program, int width, int height)
 		j += 96;
 		l = -1;
 	}
+	return(map_tiles);
 }
 
 int	so_long(int x, int y, char *map)
@@ -393,7 +400,7 @@ int	so_long(int x, int y, char *map)
 
 	t_program *program;
 	bool flag;
-
+	flag = false;
 	if (x > 960 || y > 960)
 	{
 		if (x > 960)
@@ -402,11 +409,10 @@ int	so_long(int x, int y, char *map)
 			y = 960;
 		flag = true;
 	}
-	flag = false;
 
 	program = program_init(x, y, map);
 	if (flag == true)
-		draw_map_bigger_than_screen(program, (*program).width, (*program).elevation);
+		program->map_print_big = draw_map_bigger_than_screen(program, (*program).width, (*program).elevation);
 	else
 		draw_map(program, (*program).width, (*program).elevation);
 	draw_P_and_E(&program);
