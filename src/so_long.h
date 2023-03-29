@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/29 10:49:12 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/29 11:01:07 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,15 @@ typedef struct player
 	int			x;
 	int			y2;
 	int			x2;
-	int 		up_down;
-	int 		left_right;
 	int			exit_y;
 	int			exit_x;
 	int			collect;
+	int			up_down;
+	int			left_right;
+	int			up;
+	int 		down;
+	int			right;
+	int			left;
 	int			pixel_player_y;
 	int			pixel_player_x;
 	void		*player_image;
@@ -76,8 +80,8 @@ typedef struct program
 	int			row_len;
 	int			rows;
 	void		***map_print;
-	int			map_up_down;
-	int			map_right_left;
+	// int			map_up_down;
+	// int			map_right_left;
 	t_player	player;
 }				t_program;
 

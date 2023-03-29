@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/29 10:49:13 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/29 14:58:02 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int key_handler(int key, t_program *program)
 {
 	int flag;
 	static int i = -1;
-
+	static int j = -1;
 
 
 	flag = 4;
@@ -38,16 +38,26 @@ int key_handler(int key, t_program *program)
 	{
 		if (program->map_2d[program->player.y + 1 ][program->player.x] != flag)
 		{
-			++program->map_up_down;
-			ft_printf("up/down %d\n, target is %d\n", program->map_up_down, program->player.up_down);
+			program->player.down++;
+			program->player.up++;
+			if (program->player.down == 1)
+				program->player.up_down += 10;
+			ft_printf("down %d\n,target is %d\n", program->player.down, program->player.up_down);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.y++;
 			program->player.pixel_player_y += 96;
-			if (program->map_up_down == program->player.up_down)
+			if (program->player.down == program->player.up_down)
 			{
 				program->player.pixel_player_y = 0;
 				draw_base(program, program->width, program->elevation);
-				print_map(program, program->map_print, 9, -1);
+				j += 10;
+				ft_printf("map is %d\n", i);
+				print_map(program, program->map_print, j, i);
+				program->player.up_down = 11;
+				if (program->player.up > 19)
+					program->player.up -= 10;
+				program->player.down = 1;
+
 
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
@@ -59,18 +69,29 @@ int key_handler(int key, t_program *program)
 	{
 		if (program->map_2d[program->player.y - 1 ][program->player.x] != flag)
 		{
-			--program->map_up_down;
-			ft_printf("up/down %d\n, target is %d\n", program->map_up_down, (program->player.up_down - 1));
+			program->player.down--;
+			program->player.up--;
+			if (program->player.up == 1)
+				program->player.up_down -= 10;
+			ft_printf("up %d\n,target is %d\n", program->player.up, program->player.up_down);
 			// draw_base(program, program->width, program->elevation);
 			// print_map(program, program->map_print, --program->map_up_down, program->map_right_left);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.y--;
 			program->player.pixel_player_y -= 96;
-			if (program->map_up_down == program->player.up_down - 1)
+			if (program->player.up == program->player.up_down - 1)
 			{
 				program->player.pixel_player_y = 864;
 				draw_base(program, program->width, program->elevation);
-				print_map(program, program->map_print, -1, -1);
+				j -= 10;
+				ft_printf("map is %d\n", i);
+				print_map(program, program->map_print, j, i);
+				program->player.up_down = 11;
+				// if (program->player.left == 1)
+				// 	program->player.left_right -= 10;
+				if (program->player.up_down == 11)
+					program->player.down += 10;
+				program->player.up = 10;
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
@@ -79,23 +100,29 @@ int key_handler(int key, t_program *program)
 	}
 	if (key == RIGHT && program->map_2d[program->player.y][program->player.x + 1] != 1)
 	{
-			++program->map_right_left;
-			ft_printf("right/left %d\n, target is %d\n", program->map_right_left, program->player.left_right);
 		if (program->map_2d[program->player.y][program->player.x + 1] != flag)
 		{
+			program->player.right++;
+			program->player.left++;
+			if (program->player.right == 1)
+				program->player.left_right += 10;
+			ft_printf("right %d\n,target is %d\n", program->player.right, program->player.left_right);
 			// draw_base(program, program->width, program->elevation);
 			// print_map(program, program->map_print, program->map_up_down, ++program->map_right_left);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.x++;
 			program->player.pixel_player_x += 96;
-			if (program->map_right_left == program->player.left_right)
+			if (program->player.right == program->player.left_right)
 			{
 				program->player.pixel_player_x = 0;
 				draw_base(program, program->width, program->elevation);
 				i += 10;
-				print_map(program, program->map_print, -1, i);
-				program->map_right_left = -1;
-				program->player.left_right = 9;
+				ft_printf("map is %d\n", i);
+				print_map(program, program->map_print, j, i);
+				program->player.left_right = 11;
+				if (program->player.left > 19)
+					program->player.left -= 10;
+				program->player.right = 1;
 
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
@@ -107,18 +134,30 @@ int key_handler(int key, t_program *program)
 	{
 		if (program->map_2d[program->player.y][program->player.x - 1] != flag)
 		{
-			--program->map_right_left;
-			ft_printf("right/left %d\n, target is %d\n", program->map_right_left, (program->player.left_right - 1));
+			program->player.right--;
+			program->player.left--;
+			if (program->player.left == 1)
+				program->player.left_right -= 10;
+			ft_printf("left %d\n,target is %d\n", program->player.left, program->player.left_right);
 			// draw_base(program, program->width, program->elevation);
 			// print_map(program, program->map_print, program->map_up_down, --program->map_right_left);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.x--;
 			program->player.pixel_player_x -= 96;
-			if (program->map_right_left == program->player.left_right - 1)
+			if (program->player.left == program->player.left_right - 1)
 			{
 				program->player.pixel_player_x = 864;
 				draw_base(program, program->width, program->elevation);
-				print_map(program, program->map_print, -1, -1);
+				i -= 10;
+				ft_printf("map is %d\n", i);
+				print_map(program, program->map_print, j, i);
+				program->player.left_right = 11;
+				// if (program->player.left == 1)
+				// 	program->player.left_right -= 10;
+				if (program->player.left_right == 11)
+					program->player.right += 10;
+				program->player.left = 10;
+
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
@@ -256,6 +295,8 @@ t_player player_init(t_program *program)
 	player.y = -1;
 	player.exit_x = -1;
 	player.exit_y = -1;
+	player.up_down = 11;
+	player.left_right = 11;
 	while (program->map_2d[++i] != 0)
 	{
 		while (++j < program->row_len)
@@ -292,8 +333,10 @@ t_player player_init(t_program *program)
 	}
 	player.y2 = player.y;
 	player.x2 = player.x;
-	player.up_down = 9 - player.y2;
-	player.left_right = 9 - player.x2;
+	player.up = 9 - player.y2;
+	player.down = 9 - player.y2;
+	player.left = 1 + player.x2;
+	player.right = 1 + player.x2;
 	return (player);
 }
 
@@ -339,8 +382,8 @@ t_program *program_init(int x, int y, char *map)
 	program->row_len = check_rows_lenght(program->map,1) - 1;
 	program->rows = map_rows(program->map);
 	program->map_print= NULL;
-	program->map_up_down = -1;
-	program->map_right_left = -1;
+	// program->map_up_down = -1;
+	// program->map_right_left = -1;
 	program->mlx  = mlx_init();
 	program->win = mlx_new_window(program->mlx, program->lenght, program->height, "so long");
 	return (program);
