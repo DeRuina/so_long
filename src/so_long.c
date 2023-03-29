@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/29 14:58:02 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/29 17:24:29 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int key_handler(int key, t_program *program)
 			program->player.collect--;
 			chnage_value(&program, program->player.y, program->player.x);
 		}
-	if (program->player.collect == 0)
+	if (program->player.collect == 0 && program->player.y < 10 && program->player.x < 10)
 			mlx_put_image_to_window(program->mlx, program->win, program->player.exit_granted, program->player.pixel_exit_x, program->player.pixel_exit_y);
 	if (program->map_2d[program->player.y][program->player.x] == 4)
 		exit(EXIT_SUCCESS);
@@ -305,6 +305,8 @@ t_player player_init(t_program *program)
 			{
 				player.y = i;
 				player.x = j;
+				player.pixel_player_y = (i % 10) * 96;
+				player.pixel_player_x = (j % 10) * 96;
 			}
 			if (program->map_2d[i][j] == 3)
 				player.collect++;
@@ -312,22 +314,24 @@ t_player player_init(t_program *program)
 			{
 				player.exit_y = i;
 				player.exit_x = j;
+				player.pixel_exit_y = (i % 10) * 96;
+				player.pixel_exit_x = (j % 10) * 96;
 			}
-			if (player.x == -1)
-				player.pixel_player_x += 96;
-			if (player.exit_x == -1)
-				player.pixel_exit_x += 96;
+			// if (player.x == -1)
+			// 	player.pixel_player_x += 96;
+			// if (player.exit_x == -1)
+			// 	player.pixel_exit_x += 96;
 		}
-		if (player.x == -1)
-		{
-			player.pixel_player_x = 0;
-			player.pixel_player_y += 96;
-		}
-		if (player.exit_x == -1)
-		{
-			player.pixel_exit_x = 0;
-			player.pixel_exit_y += 96;
-		}
+		// if (player.x == -1)
+		// {
+		// 	player.pixel_player_x = 0;
+		// 	player.pixel_player_y += 96;
+		// }
+		// if (player.exit_x == -1)
+		// {
+		// 	player.pixel_exit_x = 0;
+		// 	player.pixel_exit_y += 96;
+		// }
 		j = -1;
 
 	}
@@ -346,7 +350,7 @@ void draw_P_and_E(t_program **program)
 	(*program)->player.player_image = mlx_xpm_file_to_image((*program)->mlx, "./img/basic96.xpm", &(*program)->width, &(*program)->elevation);
 	mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.player_image, (*program)->player.pixel_player_x, (*program)->player.pixel_player_y);
 	(*program)->player.exit_image = mlx_xpm_file_to_image((*program)->mlx, "./img/burn_door.xpm", &(*program)->width, &(*program)->elevation);
-	mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.exit_image, (*program)->player.pixel_exit_x, (*program)->player.pixel_exit_y);
+	// mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.exit_image, (*program)->player.pixel_exit_x, (*program)->player.pixel_exit_y);
 	(*program)->player.tile_image = mlx_xpm_file_to_image((*program)->mlx, "./img/grass2.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.exit_granted = mlx_xpm_file_to_image((*program)->mlx, "./img/door1.xpm", &(*program)->width, &(*program)->elevation);
 }
@@ -391,10 +395,12 @@ t_program *program_init(int x, int y, char *map)
 
 void ***draw_map(t_program *program, int width, int height)
 {
-	int		i;
+	int		x;
+	int		y;
 	int		j;
 	int 	k;
 	void ***map_tiles;
+	// bool 	flag;
 
 	map_tiles = (void ***)malloc((program->rows + 1) * sizeof(void ***));
 
@@ -405,11 +411,18 @@ void ***draw_map(t_program *program, int width, int height)
 		map_tiles[k] = (void **)malloc((program->row_len) * sizeof(void **));
 
 	k = -1;
-	i = 0;
+	x = 0;
+	y = 0;
+	// flag = false;
 	while (++j != program->rows)
 	{
 		while (++k < program->row_len)
 		{
+			if (program->map_2d[j][k] == 2)
+			{
+				y = j;
+				x = k;
+			}
 			if (program->map_2d[j][k] == 1)
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/tree2.xpm", &width, &height);
 			else if (program->map_2d[j][k] == 3)
@@ -420,11 +433,16 @@ void ***draw_map(t_program *program, int width, int height)
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
 			else
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
+			// if (flag == false && (k % 10 == 0) && k > 9)
+			// 	x += 10;
 		}
 		k = -1;
+		// if (flag == false && (j % 10 == 0) && j > 9)
+		// 	y += 10;
 	}
-
-	print_map(program, map_tiles, -1, -1);
+	 y = y - y % 10;
+	 x = x - x % 10;
+	print_map(program, map_tiles, y - 1, x - 1);
 	return(map_tiles);
 }
 
