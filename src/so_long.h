@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/28 11:18:08 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/29 10:49:12 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ typedef struct player
 {
 	int			y;
 	int			x;
+	int			y2;
+	int			x2;
+	int 		up_down;
+	int 		left_right;
 	int			exit_y;
 	int			exit_x;
 	int			collect;
@@ -71,7 +75,9 @@ typedef struct program
 	int			elevation;
 	int			row_len;
 	int			rows;
-	void		***map_print_big;
+	void		***map_print;
+	int			map_up_down;
+	int			map_right_left;
 	t_player	player;
 }				t_program;
 
@@ -100,6 +106,8 @@ char			*join_and_free_item_and_amount(char *item, int amount,
 int				**read_map_to_nbr(char *map);
 void			free_program(t_program *program);
 void			***draw_map(t_program *program, int width, int height);
-void			print_map(t_program *program, void ***map_tiles);
+void			print_map(t_program *program, void ***map_tiles, int i, int l);
+void			draw_base(t_program *program, int width, int height);
+void			chnage_value(t_program **program, int i, int k);
 
 #endif
