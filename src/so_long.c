@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/30 09:55:09 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/30 10:46:41 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,22 @@
 int key_handler(int key, t_program *program)
 {
 	int flag;
-	static int i;
-	static int j;
+	int i;
+	int j;
 
-	if (i == 0 && j == 0)
-	{
-		j = (program->player.y2 - program->player.y2 % 10) - 1;
-		i = (program->player.x2 - program->player.x2 % 10) -1;
-	}
+
+
+	ft_printf("player up-%d player down-%d\n", program->player.up, program->player.down);
+	// if (program->player.key_count++ == 0)
+	// {
+		j = (program->player.y - program->player.y % 10) - 1;
+		i = (program->player.x - program->player.x % 10) -1;
+	// }
+	// else
+	// {
+	// 	j = program->player.y2;
+	// 	i = program->player.x2;
+	// }
 	flag = 4;
 	if (program->player.collect == 0)
 		flag = 1;
@@ -40,7 +48,6 @@ int key_handler(int key, t_program *program)
 	ft_printf("map is %d,%d\n", j, i);
 	if (key == DOWN && program->map_2d[program->player.y + 1 ][program->player.x] != 1)
 	{
-		ft_printf("map is %d\n", i);
 		if (program->map_2d[program->player.y + 1 ][program->player.x] != flag)
 		{
 			program->player.down++;
@@ -56,7 +63,7 @@ int key_handler(int key, t_program *program)
 				program->player.pixel_player_y = 0;
 				draw_base(program, program->width, program->elevation);
 				j += 10;
-				program->player.y2 += 10;
+				// program->player.y2 += 10;
 				ft_printf("map is %d,%d\n", j, i);
 				print_map(program, program->map_print, j, i);
 				program->player.up_down = 11;
@@ -90,7 +97,7 @@ int key_handler(int key, t_program *program)
 				program->player.pixel_player_y = 864;
 				draw_base(program, program->width, program->elevation);
 				j -= 10;
-				program->player.y2 -= 10;
+				// program->player.y2 -= 10;
 				ft_printf("map is %d,%d\n", j, i);
 				print_map(program, program->map_print, j, i);
 				program->player.up_down = 11;
@@ -124,7 +131,7 @@ int key_handler(int key, t_program *program)
 				program->player.pixel_player_x = 0;
 				draw_base(program, program->width, program->elevation);
 				i += 10;
-				program->player.x2 += 10;
+				// program->player.x2 += 10;
 				ft_printf("map is %d,%d\n", j, i);
 				print_map(program, program->map_print, j, i);
 				program->player.left_right = 11;
@@ -157,7 +164,7 @@ int key_handler(int key, t_program *program)
 				program->player.pixel_player_x = 864;
 				draw_base(program, program->width, program->elevation);
 				i -= 10;
-				program->player.x2 -= 10;
+				// program->player.x2 -= 10;
 				ft_printf("map is %d,%d\n", j, i);
 				print_map(program, program->map_print, j, i);
 				program->player.left_right = 11;
@@ -346,10 +353,11 @@ t_player player_init(t_program *program)
 	}
 	player.y2 = player.y;
 	player.x2 = player.x;
-	player.up = 9 - (player.y2 % 10);
-	player.down = 9 - (player.y2 % 10);
-	player.left = 1 + (player.x2 % 10);
-	player.right = 1 + (player.x2 % 10);
+	player.up = 1 + (player.y % 10);
+	player.down = 1 + (player.y % 10);
+	player.left = 1 + (player.x % 10);
+	player.right = 1 + (player.x % 10);
+	player.key_count = 0;
 	return (player);
 }
 
@@ -366,12 +374,9 @@ void draw_P_and_E(t_program **program)
 
 int render(t_program *program)
 {
-	static int i;
-	static int j;
 	if (program->win == NULL)
 		return (1);
-	j = (program->player.y2 - program->player.y2 % 10) - 1;
-	i = (program->player.x2 - program->player.x2 % 10) -1;
+
 	// program->player = player_init(program);
 	// program->player.player_image = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &program->width, &program->elevation);
 	// mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
