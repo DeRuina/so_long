@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/30 10:08:36 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/30 10:54:12 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ typedef struct player
 {
 	int			y;
 	int			x;
-	int			y2;
-	int			x2;
 	int			exit_y;
 	int			exit_x;
 	int			collect;
@@ -65,7 +63,6 @@ typedef struct player
 	void		*exit_granted;
 	int			pixel_exit_y;
 	int			pixel_exit_x;
-	int			key_count;
 }				t_player;
 
 typedef struct program
