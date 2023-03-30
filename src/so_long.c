@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/30 10:56:02 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/30 11:23:30 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ int key_handler(int key, t_program *program)
 			program->player.collect--;
 			chnage_value(&program, program->player.y, program->player.x);
 		}
-	if (program->player.collect == 0 && program->player.y < 10 && program->player.x < 10)
+	if (program->player.collect == 0 && ((program->player.y - program->player.y % 10) - 1 == j && (program->player.exit_y - program->player.exit_y % 10) - 1 == j) && ((program->player.x - program->player.x % 10) -1 == i && (program->player.exit_x - program->player.exit_x % 10) - 1 == i))
 			mlx_put_image_to_window(program->mlx, program->win, program->player.exit_granted, program->player.pixel_exit_x, program->player.pixel_exit_y);
 	if (program->map_2d[program->player.y][program->player.x] == 4)
 		exit(EXIT_SUCCESS);
