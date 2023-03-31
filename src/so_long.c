@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/31 16:43:33 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/31 17:17:57 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int key_handler(int key, t_program *program)
 			ft_printf("down %d\n,target is %d\n", program->player.down, program->player.up_down);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.y++;
-			// if (!program->visited_block[program->player.y][program->player.x])
-			// 	program->visited_block[program->player.y][program->player.x] = true;
 			ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
 			program->player.pixel_player_y += 96;
 			if (program->player.down == program->player.up_down)
@@ -85,8 +83,6 @@ int key_handler(int key, t_program *program)
 			ft_printf("up %d\n,target is %d\n", program->player.up, program->player.up_down);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.y--;
-			// if (!program->visited_block[program->player.y][program->player.x])
-			// 	program->visited_block[program->player.y][program->player.x] = true;
 			ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
 			program->player.pixel_player_y -= 96;
 			if (program->player.up == program->player.up_down - 1)
@@ -117,8 +113,6 @@ int key_handler(int key, t_program *program)
 			ft_printf("right %d\n,target is %d\n", program->player.right, program->player.left_right);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.x++;
-			// if (!program->visited_block[program->player.y][program->player.x])
-			// 	program->visited_block[program->player.y][program->player.x] = true;
 			ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
 			program->player.pixel_player_x += 96;
 			if (program->player.right == program->player.left_right)
@@ -150,8 +144,6 @@ int key_handler(int key, t_program *program)
 			ft_printf("left %d\n,target is %d\n", program->player.left, program->player.left_right);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.x--;
-			// if (!program->visited_block[program->player.y][program->player.x])
-			// 	program->visited_block[program->player.y][program->player.x] = true;
 			ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
 			program->player.pixel_player_x -= 96;
 			if (program->player.left == program->player.left_right - 1)
@@ -174,14 +166,12 @@ int key_handler(int key, t_program *program)
 	}
 	if (program->map_2d[program->player.y][program->player.x] == 3 && !program->visited_block[program->player.y][program->player.x])
 		{
-			// if (!program->visited_block[program->player.y][program->player.x])
 			if (!program->visited_block[program->player.y][program->player.x])
 				program->visited_block[program->player.y][program->player.x] = true;
 				program->player.collect--;
+			program->map_print[program->player.y][program->player.x] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &program->width, &program->elevation);
 			ft_printf(" collectable are %d\n", program->player.collect);
 		}
-	// if (!program->visited_block[program->player.y][program->player.x])
-	// 			program->visited_block[program->player.y][program->player.x] = true;
 	if (program->player.collect == 0 && ((program->player.y - program->player.y % 10) - 1 == j && (program->player.exit_y - program->player.exit_y % 10) - 1 == j) && ((program->player.x - program->player.x % 10) -1 == i && (program->player.exit_x - program->player.exit_x % 10) - 1 == i))
 			mlx_put_image_to_window(program->mlx, program->win, program->player.exit_granted, program->player.pixel_exit_x, program->player.pixel_exit_y);
 	if (program->map_2d[program->player.y][program->player.x] == 4)
@@ -190,11 +180,6 @@ int key_handler(int key, t_program *program)
 
 
 	return (0);
-}
-
-void chnage_value(t_program **program, int i, int k)
-{
-	(*program)->map_2d[i][k] = 0;
 }
 
 int mouse_handler(int key, t_program *program)
@@ -393,7 +378,7 @@ t_program *program_init(int x, int y, char *map)
 	return (program);
 }
 
-void ***map_tiles_no_water(t_program *program, int width, int height)
+void ***map_tiles_array(t_program *program, int width, int height)
 {
 	void	***map_tiles;
 	int		j;
@@ -413,6 +398,8 @@ void ***map_tiles_no_water(t_program *program, int width, int height)
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/tree2.xpm", &width, &height);
 			else if (program->map_2d[j][k] == 4)
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
+			else if (program->map_2d[j][k] == 3)
+				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
 			else
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
 		}

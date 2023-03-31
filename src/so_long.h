@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/31 09:12:32 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/31 17:05:40 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ void			free_program(t_program *program);
 void			***draw_map(t_program *program, int width, int height);
 void			print_map(t_program *program, void ***map_tiles, int i, int l);
 void			draw_base(t_program *program, int width, int height);
-void			***map_tiles_no_water(t_program *program, int width,
-					int height);
+void			***map_tiles_array(t_program *program, int width, int height);
 
 #endif
