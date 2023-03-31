@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/31 17:17:57 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/31 18:06:03 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int key_handler(int key, t_program *program)
 
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
-			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+			mlx_put_image_to_window(program->mlx, program->win, program->player.player_down, program->player.pixel_player_x, program->player.pixel_player_y);
 		}
 
 	}
@@ -98,7 +98,7 @@ int key_handler(int key, t_program *program)
 				program->player.up = 10;
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
-			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+			mlx_put_image_to_window(program->mlx, program->win, program->player.player_up, program->player.pixel_player_x, program->player.pixel_player_y);
 
 		}
 	}
@@ -129,7 +129,7 @@ int key_handler(int key, t_program *program)
 
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
-			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+			mlx_put_image_to_window(program->mlx, program->win, program->player.player_right, program->player.pixel_player_x, program->player.pixel_player_y);
 
 		}
 	}
@@ -160,7 +160,7 @@ int key_handler(int key, t_program *program)
 
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
-			mlx_put_image_to_window(program->mlx, program->win, program->player.player_image, program->player.pixel_player_x, program->player.pixel_player_y);
+			mlx_put_image_to_window(program->mlx, program->win, program->player.player_left, program->player.pixel_player_x, program->player.pixel_player_y);
 
 		}
 	}
@@ -341,6 +341,10 @@ void draw_P_and_E(t_program **program)
 	(*program)->player.tile_image = mlx_xpm_file_to_image((*program)->mlx, "./img/grass2.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.exit_granted = mlx_xpm_file_to_image((*program)->mlx, "./img/door1.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.water_image = mlx_xpm_file_to_image((*program)->mlx, "./img/water.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.player_right = mlx_xpm_file_to_image((*program)->mlx, "./img/right.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.player_left = mlx_xpm_file_to_image((*program)->mlx, "./img/left.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.player_up = mlx_xpm_file_to_image((*program)->mlx, "./img/up.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.player_down = mlx_xpm_file_to_image((*program)->mlx, "./img/down.xpm", &(*program)->width, &(*program)->elevation);
 }
 
 int render(t_program *program)

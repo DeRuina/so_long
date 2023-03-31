@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/31 17:05:40 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/31 17:47:08 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ typedef struct player
 	int			pixel_player_y;
 	int			pixel_player_x;
 	void		*player_image;
+	void		*player_right;
+	void		*player_left;
+	void		*player_up;
+	void		*player_down;
 	void		*exit_image;
 	void		*tile_image;
 	void		*water_image;
