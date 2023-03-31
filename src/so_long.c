@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/31 09:48:56 by druina           ###   ########.fr       */
+/*   Updated: 2023/03/31 16:43:33 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,11 +339,11 @@ t_player player_init(t_program *program)
 	player.down = 1 + (player.y % 10);
 	player.left = 1 + (player.x % 10);
 	player.right = 1 + (player.x % 10);
-	// player.collect_array = (int **)malloc(player.collect + 1 * sizeof(int *));
-	// i = -1;
-	// j = -1;
-	// while (++i != player.collect)
-	// 	player.collect_array[i] = (int *)malloc(3 * sizeof(int));
+	player.collect_array = (int **)malloc(player.collect + 2 * sizeof(int *));
+	i = -1;
+	j = -1;
+	while (++i < player.collect)
+		player.collect_array[i] = (int *)malloc(4 * sizeof(int));
 	return (player);
 }
 
@@ -387,9 +387,9 @@ t_program *program_init(int x, int y, char *map)
 	program->map_print= NULL;
 	program->mlx  = mlx_init();
 	program->win = mlx_new_window(program->mlx, program->lenght, program->height, "so long");
-	program->visited_block = (int **)malloc(program->rows + 2 * sizeof(int *));
+	program->visited_block = (int **)ft_calloc(program->rows + 2, sizeof(int *));
 	while (i++ != program->rows)
-		program->visited_block[i] = ft_calloc(program->row_len + 1, sizeof(int));
+		program->visited_block[i] = ft_calloc((program->row_len +  1), sizeof(int));
 	return (program);
 }
 
