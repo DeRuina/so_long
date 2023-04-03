@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/03/31 17:47:08 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/03 08:42:54 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct player
 	void		*tile_image;
 	void		*water_image;
 	void		*exit_granted;
+	void		*enemy;
 	int			pixel_exit_y;
 	int			pixel_exit_x;
 	int			**collect_array;

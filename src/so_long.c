@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/03/31 18:06:03 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/03 08:49:08 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,43 +416,12 @@ void ***draw_map(t_program *program, int width, int height)
 {
 	int		x;
 	int		y;
-	int		j;
-	int 	k;
 	void ***map_tiles;
 
-	map_tiles = (void ***)malloc((program->rows + 1) * sizeof(void ***));
-
 	draw_base(program, width, height);
-	j = -1;
-	k = -1;
-	while (++k < program->rows + 1)
-		map_tiles[k] = (void **)malloc((program->row_len) * sizeof(void **));
-
-	k = -1;
 	x = 0;
 	y = 0;
-	while (++j != program->rows)
-	{
-		while (++k < program->row_len)
-		{
-			if (program->map_2d[j][k] == 2)
-			{
-				y = j;
-				x = k;
-			}
-			if (program->map_2d[j][k] == 1)
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/tree2.xpm", &width, &height);
-			else if (program->map_2d[j][k] == 3)
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
-			// else if (program->map_2d[j][k] == 2)
-			// 	map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
-			else if (program->map_2d[j][k] == 4)
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
-			else
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
-		}
-		k = -1;
-	}
+	map_tiles = map_tiles_array(program, program->width, program->elevation);
 	 y = y - y % 10;
 	 x = x - x % 10;
 	print_map(program, map_tiles, y - 1, x - 1);
