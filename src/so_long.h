@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/03 08:42:54 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:04:58 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,24 @@ typedef enum bool
 	false = 3,
 	true = 4
 }				bool;
+
+// typedef struct enemy
+// {
+// 	void		*enemy;
+// 	int			y;
+// 	int			x;
+// 	int			pixel_enemy_y;
+// 	int			pixel_enemy_x;
+// 	int			y2;
+// 	int			x2;
+// 	int			pixel_enemy_y2;
+// 	int			pixel_enemy_x2;
+// 	int			y3;
+// 	int			x3;
+// 	int			pixel_enemy_y3;
+// 	int			pixel_enemy_x3;
+
+// }				t_enemy;
 
 typedef struct map_check
 {
@@ -67,9 +85,14 @@ typedef struct player
 	void		*water_image;
 	void		*exit_granted;
 	void		*enemy;
+	void		*fire_up;
+	void		*fire_down;
+	void		*fire_right;
+	void		*fire_left;
 	int			pixel_exit_y;
 	int			pixel_exit_x;
 	int			**collect_array;
+	void		*game_over;
 }				t_player;
 
 typedef struct program
@@ -86,7 +109,9 @@ typedef struct program
 	int			rows;
 	void		***map_print;
 	int			**visited_block;
+	int			dir;
 	t_player	player;
+	// t_enemy		enemy;
 }				t_program;
 
 int				main(int argc, char **argv);

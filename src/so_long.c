@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/03 08:49:08 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:37:09 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define DOWN 125
 #define RIGHT 124
 #define LEFT 123
-#define SHOOT 49
+#define FIRE 49
 
 
 
@@ -29,36 +29,44 @@ int key_handler(int key, t_program *program)
 
 	if (!program->visited_block[program->player.y][program->player.x])
 		program->visited_block[program->player.y][program->player.x] = true;
-	ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
-	ft_printf("player up-%d player down-%d\n", program->player.up, program->player.down);
+	// ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
+	// ft_printf("player up-%d player down-%d\n", program->player.up, program->player.down);
 
-		j = (program->player.y - program->player.y % 10) - 1;
-		i = (program->player.x - program->player.x % 10) -1;
+
+	j = (program->player.y - program->player.y % 10) - 1;
+	i = (program->player.x - program->player.x % 10) -1;
 	flag = 4;
 	if (program->player.collect == 0)
 		flag = 1;
 	if (key == ESC)
 		exit(EXIT_SUCCESS);
-	ft_printf("map is %d,%d\n", j, i);
+	// ft_printf("map is %d,%d\n", j, i);
 	if (key == DOWN && program->map_2d[program->player.y + 1 ][program->player.x] != 1)
 	{
+		// if (program->map_2d[program->player.y + 1][program->player.x] == 5)
+		// mlx_string_put(program->mlx, program->win, 480, 480, 0xEE4B2B, "YOU DIED - GAME OVER!");
+		program->dir = 1;
 		if (program->map_2d[program->player.y + 1 ][program->player.x] != flag)
 		{
 			program->player.down++;
 			program->player.up++;
 			if (program->player.down == 1)
 				program->player.up_down += 10;
-			ft_printf("down %d\n,target is %d\n", program->player.down, program->player.up_down);
+			// ft_printf("down %d\n,target is %d\n", program->player.down, program->player.up_down);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y + 1][program->player.x], program->player.pixel_player_x, program->player.pixel_player_y + 96);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y - 1][program->player.x], program->player.pixel_player_x, program->player.pixel_player_y - 96);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y][program->player.x + 1], program->player.pixel_player_x + 96, program->player.pixel_player_y);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y][program->player.x - 1], program->player.pixel_player_x - 96, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.y++;
-			ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
+			// ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
 			program->player.pixel_player_y += 96;
 			if (program->player.down == program->player.up_down)
 			{
 				program->player.pixel_player_y = 0;
 				draw_base(program, program->width, program->elevation);
 				j += 10;
-				ft_printf("map is %d,%d\n", j, i);
+				// ft_printf("map is %d,%d\n", j, i);
 				print_map(program, program->map_print, j, i);
 				program->player.up_down = 11;
 				if (program->player.up > 19)
@@ -69,58 +77,75 @@ int key_handler(int key, t_program *program)
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_down, program->player.pixel_player_x, program->player.pixel_player_y);
+			// ft_printf("DIR IS %d\n", program->dir);
+			ft_printf("tile is %d\n",  program->map_2d[program->player.y][program->player.x]);
 		}
 
 	}
 	if (key == UP && program->map_2d[program->player.y - 1 ][program->player.x] != 1)
 	{
+		program->dir = 2;
+		// if (program->map_2d[program->player.y - 1][program->player.x] == 5)
+		// mlx_string_put(program->mlx, program->win, 480, 480, 0xEE4B2B, "YOU DIED - GAME OVER!");
 		if (program->map_2d[program->player.y - 1 ][program->player.x] != flag)
 		{
 			program->player.down--;
 			program->player.up--;
 			if (program->player.up == 1)
 				program->player.up_down -= 10;
-			ft_printf("up %d\n,target is %d\n", program->player.up, program->player.up_down);
+			// ft_printf("up %d\n,target is %d\n", program->player.up, program->player.up_down);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y + 1][program->player.x], program->player.pixel_player_x, program->player.pixel_player_y + 96);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y - 1][program->player.x], program->player.pixel_player_x, program->player.pixel_player_y - 96);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y][program->player.x + 1], program->player.pixel_player_x + 96, program->player.pixel_player_y);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y][program->player.x - 1], program->player.pixel_player_x - 96, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.y--;
-			ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
+			// ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
 			program->player.pixel_player_y -= 96;
 			if (program->player.up == program->player.up_down - 1)
 			{
 				program->player.pixel_player_y = 864;
 				draw_base(program, program->width, program->elevation);
 				j -= 10;
-				ft_printf("map is %d,%d\n", j, i);
+				// ft_printf("map is %d,%d\n", j, i);
 				print_map(program, program->map_print, j, i);
 				program->player.up_down = 11;
 				if (program->player.up_down == 11)
 					program->player.down += 10;
 				program->player.up = 10;
 			}
+
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_up, program->player.pixel_player_x, program->player.pixel_player_y);
-
+			// ft_printf("DIR IS %d\n", program->dir);
 		}
 	}
 	if (key == RIGHT && program->map_2d[program->player.y][program->player.x + 1] != 1)
 	{
+		program->dir = 4;
+		// if (program->map_2d[program->player.y][program->player.x + 1] == 5)
+		// mlx_string_put(program->mlx, program->win, 480, 480, 0xEE4B2B, "YOU DIED - GAME OVER!");
 		if (program->map_2d[program->player.y][program->player.x + 1] != flag)
 		{
 			program->player.right++;
 			program->player.left++;
 			if (program->player.right == 1)
 				program->player.left_right += 10;
-			ft_printf("right %d\n,target is %d\n", program->player.right, program->player.left_right);
+			// ft_printf("right %d\n,target is %d\n", program->player.right, program->player.left_right);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y + 1][program->player.x], program->player.pixel_player_x, program->player.pixel_player_y + 96);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y - 1][program->player.x], program->player.pixel_player_x, program->player.pixel_player_y - 96);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y][program->player.x + 1], program->player.pixel_player_x + 96, program->player.pixel_player_y);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y][program->player.x - 1], program->player.pixel_player_x - 96, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.x++;
-			ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
+			// ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
 			program->player.pixel_player_x += 96;
 			if (program->player.right == program->player.left_right)
 			{
 				program->player.pixel_player_x = 0;
 				draw_base(program, program->width, program->elevation);
 				i += 10;
-				ft_printf("map is %d,%d\n", j, i);
+				// ft_printf("map is %d,%d\n", j, i);
 				print_map(program, program->map_print, j, i);
 				program->player.left_right = 11;
 				if (program->player.left > 19)
@@ -130,28 +155,35 @@ int key_handler(int key, t_program *program)
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_right, program->player.pixel_player_x, program->player.pixel_player_y);
-
+			// ft_printf("DIR IS %d\n", program->dir);
 		}
 	}
 	if (key == LEFT && program->map_2d[program->player.y][program->player.x - 1] != 1)
 	{
+		program->dir = 3;
+		// if (program->map_2d[program->player.y][program->player.x - 1] == 5)
+		// mlx_string_put(program->mlx, program->win, 480, 480, 0xEE4B2B, "YOU DIED - GAME OVER!");
 		if (program->map_2d[program->player.y][program->player.x - 1] != flag)
 		{
 			program->player.right--;
 			program->player.left--;
 			if (program->player.left == 1)
 				program->player.left_right -= 10;
-			ft_printf("left %d\n,target is %d\n", program->player.left, program->player.left_right);
+			// ft_printf("left %d\n,target is %d\n", program->player.left, program->player.left_right);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y + 1][program->player.x], program->player.pixel_player_x, program->player.pixel_player_y + 96);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y - 1][program->player.x], program->player.pixel_player_x, program->player.pixel_player_y - 96);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y][program->player.x + 1], program->player.pixel_player_x + 96, program->player.pixel_player_y);
+			mlx_put_image_to_window(program->mlx, program->win, program->map_print[program->player.y][program->player.x - 1], program->player.pixel_player_x - 96, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			program->player.x--;
-			ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
+			// ft_printf("is true %d\n",program->visited_block[program->player.y][program->player.x]);
 			program->player.pixel_player_x -= 96;
 			if (program->player.left == program->player.left_right - 1)
 			{
 				program->player.pixel_player_x = 864;
 				draw_base(program, program->width, program->elevation);
 				i -= 10;
-				ft_printf("map is %d,%d\n", j, i);
+				// ft_printf("map is %d,%d\n", j, i);
 				print_map(program, program->map_print, j, i);
 				program->player.left_right = 11;
 				if (program->player.left_right == 11)
@@ -161,7 +193,49 @@ int key_handler(int key, t_program *program)
 			}
 			mlx_put_image_to_window(program->mlx, program->win, program->player.tile_image, program->player.pixel_player_x, program->player.pixel_player_y);
 			mlx_put_image_to_window(program->mlx, program->win, program->player.player_left, program->player.pixel_player_x, program->player.pixel_player_y);
-
+			// ft_printf("DIR IS %d\n", program->dir);
+		}
+	}
+	if (program->map_2d[program->player.y][program->player.x] == 5)
+		exit(EXIT_SUCCESS);
+		// mlx_put_image_to_window(program->mlx, program->win, program->player.game_over, 0, 0);
+	if (key == FIRE)
+	{
+		if (program->dir == 1)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, program->player.fire_down, program->player.pixel_player_x, program->player.pixel_player_y + 96);
+			if (program->map_2d[program->player.y + 1 ][program->player.x] == 5)
+			{
+				program->map_2d[program->player.y + 1 ][program->player.x] = 0;
+				program->map_print[program->player.y + 1 ][program->player.x] = program->player.tile_image;
+			}
+		}
+		if (program->dir == 2)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, program->player.fire_up, program->player.pixel_player_x, program->player.pixel_player_y - 96);
+			if (program->map_2d[program->player.y - 1 ][program->player.x] == 5)
+			{
+				program->map_2d[program->player.y - 1 ][program->player.x] = 0;
+				program->map_print[program->player.y - 1 ][program->player.x] = program->player.tile_image;
+			}
+		}
+		if (program->dir == 3)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, program->player.fire_left, program->player.pixel_player_x - 96, program->player.pixel_player_y);
+		if (program->map_2d[program->player.y][program->player.x - 1] == 5)
+			{
+				program->map_2d[program->player.y][program->player.x - 1] = 0;
+				program->map_print[program->player.y][program->player.x - 1] = program->player.tile_image;
+			}
+		}
+		if (program->dir == 4)
+		{
+			mlx_put_image_to_window(program->mlx, program->win, program->player.fire_right, program->player.pixel_player_x + 96, program->player.pixel_player_y);
+		if (program->map_2d[program->player.y][program->player.x + 1] == 5)
+			{
+				program->map_2d[program->player.y][program->player.x + 1] = 0;
+				program->map_print[program->player.y][program->player.x + 1] = program->player.tile_image;
+			}
 		}
 	}
 	if (program->map_2d[program->player.y][program->player.x] == 3 && !program->visited_block[program->player.y][program->player.x])
@@ -169,8 +243,9 @@ int key_handler(int key, t_program *program)
 			if (!program->visited_block[program->player.y][program->player.x])
 				program->visited_block[program->player.y][program->player.x] = true;
 				program->player.collect--;
+			program->map_2d[program->player.y][program->player.x] = 0;
 			program->map_print[program->player.y][program->player.x] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &program->width, &program->elevation);
-			ft_printf(" collectable are %d\n", program->player.collect);
+			// ft_printf(" collectable are %d\n", program->player.collect);
 		}
 	if (program->player.collect == 0 && ((program->player.y - program->player.y % 10) - 1 == j && (program->player.exit_y - program->player.exit_y % 10) - 1 == j) && ((program->player.x - program->player.x % 10) -1 == i && (program->player.exit_x - program->player.exit_x % 10) - 1 == i))
 			mlx_put_image_to_window(program->mlx, program->win, program->player.exit_granted, program->player.pixel_exit_x, program->player.pixel_exit_y);
@@ -210,8 +285,9 @@ int **read_map_to_nbr(char *map)
 	int		fd;
 	int		i;
 	int		k;
+	int		count;
 
-
+	count = 0;
 	k = -1;
 	i = -1;
 	map_lines_nbr = malloc((map_rows(map) + 1) * sizeof(int *));
@@ -228,7 +304,9 @@ int **read_map_to_nbr(char *map)
 	{
 		while (map_lines[i][++k] != '\n')
 		{
-			if (map_lines[i][k] == 'P')
+			if (map_lines[i][k] == '0' && count % 5 == 0)
+				map_lines_nbr[i][k] = 5;
+			else if (map_lines[i][k] == 'P')
 				map_lines_nbr[i][k] = 2;
 			else if (map_lines[i][k] == 'C')
 				map_lines_nbr[i][k] = 3;
@@ -236,6 +314,8 @@ int **read_map_to_nbr(char *map)
 				map_lines_nbr[i][k] = 4;
 			else
 				map_lines_nbr[i][k] = map_lines[i][k] - '0';
+			if (map_lines[i][k] == '0')
+				count++;
 		}
 		k = -1;
 	}
@@ -332,9 +412,59 @@ t_player player_init(t_program *program)
 	return (player);
 }
 
+// t_enemy enemy_init(t_program *program)
+// {
+// 	t_enemy enemy;
+// 	int i;
+// 	int j;
+
+// 	i = -1;
+// 	j = -1;
+// 	enemy.x = 0;
+// 	enemy.y = 0;
+// 	enemy.pixel_enemy_y = 0;
+// 	enemy.pixel_enemy_x = 0;
+// 	enemy.x2 = 0;
+// 	enemy.y2 = 0;
+// 	enemy.pixel_enemy_y2 = 0;
+// 	enemy.pixel_enemy_x2 = 0;
+// 	enemy.x3 = 0;
+// 	enemy.y3 = 0;
+// 	enemy.pixel_enemy_y3 = 0;
+// 	enemy.pixel_enemy_x3 = 0;
+// 	while (program->map_2d[++i] != 0)
+// 	{
+// 		while (++j < program->row_len)
+// 		{
+// 			if (program->map_2d[i][j] == 2)
+// 			{
+// 				player.y = i;
+// 				player.x = j;
+// 				player.pixel_player_y = (i % 10) * 96;
+// 				player.pixel_player_x = (j % 10) * 96;
+// 			}
+// 			if (program->map_2d[i][j] == 3)
+// 				player.collect++;
+// 			if (program->map_2d[i][j] == 4)
+// 			{
+// 				player.exit_y = i;
+// 				player.exit_x = j;
+// 				player.pixel_exit_y = (i % 10) * 96;
+// 				player.pixel_exit_x = (j % 10) * 96;
+// 			}
+// 		}
+
+// 		j = -1;
+
+// 	}
+
+// 	return (enemy);
+// }
+
 void draw_P_and_E(t_program **program)
 {
 	(*program)->player = player_init((*program));
+	// (*program)->enemy = enemy_init((*program));
 	(*program)->player.player_image = mlx_xpm_file_to_image((*program)->mlx, "./img/basic96.xpm", &(*program)->width, &(*program)->elevation);
 	mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.player_image, (*program)->player.pixel_player_x, (*program)->player.pixel_player_y);
 	(*program)->player.exit_image = mlx_xpm_file_to_image((*program)->mlx, "./img/burn_door.xpm", &(*program)->width, &(*program)->elevation);
@@ -345,6 +475,14 @@ void draw_P_and_E(t_program **program)
 	(*program)->player.player_left = mlx_xpm_file_to_image((*program)->mlx, "./img/left.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.player_up = mlx_xpm_file_to_image((*program)->mlx, "./img/up.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.player_down = mlx_xpm_file_to_image((*program)->mlx, "./img/down.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.enemy = mlx_xpm_file_to_image((*program)->mlx, "./img/basic96.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.fire_up = mlx_xpm_file_to_image((*program)->mlx, "./img/fire2.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.fire_down = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_down.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.fire_right = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_right.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.fire_left = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_left.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.game_over = mlx_xpm_file_to_image((*program)->mlx, "./img/game_over.xpm", &(*program)->width, &(*program)->elevation);
+
+
 }
 
 int render(t_program *program)
@@ -370,6 +508,7 @@ t_program *program_init(int x, int y, char *map)
 	program->lenght = x;
 	program->height = y;
 	program->map = map;
+	program->dir = 0;
 	program->map_2d = read_map_to_nbr(map);
 	program->row_len = check_rows_lenght(program->map,1) - 1;
 	program->rows = map_rows(program->map);
@@ -404,6 +543,8 @@ void ***map_tiles_array(t_program *program, int width, int height)
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
 			else if (program->map_2d[j][k] == 3)
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
+			else if (program->map_2d[j][k] == 5)
+				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
 			else
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
 		}
