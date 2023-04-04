@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/03 15:51:12 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/04 15:36:44 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,23 @@ int key_handler(int key, t_program *program)
 
 	j = (program->player.y - program->player.y % 10) - 1;
 	i = (program->player.x - program->player.x % 10) -1;
+	enemy_movement(&program, j + 1, i + 1);
 	flag = 4;
 	if (program->player.collect == 0)
 		flag = 1;
 	if (key == ESC)
 		exit(EXIT_SUCCESS);
-
+	// enemy_movement(&program);
 	if (key == DOWN )
 	{
+		// enemy_movement(&program);
 		program->dir = 1;
 		if (program->map_2d[program->player.y + 1 ][program->player.x] != 1)
 		{
 
 		if (program->map_2d[program->player.y + 1 ][program->player.x] != flag)
 		{
+			program->count++;
 			program->player.down++;
 			program->player.up++;
 			if (program->player.down == 1)
@@ -84,12 +87,14 @@ int key_handler(int key, t_program *program)
 	}
 	if (key == UP)
 	{
+		// enemy_movement(&program);
 		program->dir = 2;
 	 if (program->map_2d[program->player.y - 1 ][program->player.x] != 1)
 	{
 
 		if (program->map_2d[program->player.y - 1 ][program->player.x] != flag)
 		{
+			program->count++;
 			program->player.down--;
 			program->player.up--;
 			if (program->player.up == 1)
@@ -124,11 +129,13 @@ int key_handler(int key, t_program *program)
 	}
 	if (key == RIGHT )
 	{
+		// enemy_movement(&program);
 		program->dir = 4;
 	  if (program->map_2d[program->player.y][program->player.x + 1] != 1)
 	{
 		if (program->map_2d[program->player.y][program->player.x + 1] != flag)
 		{
+			program->count++;
 			program->player.right++;
 			program->player.left++;
 			if (program->player.right == 1)
@@ -162,11 +169,13 @@ int key_handler(int key, t_program *program)
 	}
 	if (key == LEFT )
 	{
+		// enemy_movement(&program);
 		program->dir = 3;
 	 if (program->map_2d[program->player.y][program->player.x - 1] != 1)
 	{
 		if (program->map_2d[program->player.y][program->player.x - 1] != flag)
 		{
+			program->count++;
 			program->player.right--;
 			program->player.left--;
 			if (program->player.left == 1)
@@ -198,6 +207,8 @@ int key_handler(int key, t_program *program)
 		}
 	}
 	}
+	if (key != FIRE)
+		ft_printf("%d moves\n", program->count);
 	if (program->map_2d[program->player.y][program->player.x] == 5)
 		exit(EXIT_SUCCESS);
 		// mlx_put_image_to_window(program->mlx, program->win, program->player.game_over, 0, 0);
@@ -240,6 +251,7 @@ int key_handler(int key, t_program *program)
 			}
 		}
 	}
+	// enemy_movement(&program);
 	if (program->map_2d[program->player.y][program->player.x] == 3 && !program->visited_block[program->player.y][program->player.x])
 		{
 			if (!program->visited_block[program->player.y][program->player.x])
@@ -258,6 +270,86 @@ int key_handler(int key, t_program *program)
 
 	return (0);
 }
+
+void enemy_movement(t_program **program, int y, int x)
+{
+	int i;
+	int j;
+	int check_down[2];
+	x = 0;
+	y = 0;
+	i = -1;
+	j = -1;
+	check_down[0] = 0;
+	check_down[1] = 0;
+	if ((*program)->count % 5 == 0)
+	{
+		ft_printf("ENTERED ENEMY\n");
+		while ((*program)->map_2d[++i] != 0)
+		{
+			while (++j < (*program)->row_len)
+			{
+				if ((*program)->map_2d[i][j] == 5 && (*program)->map_2d[i][j] != (*program)->map_2d[check_down[0]][check_down[1]])
+				{
+					if (i - i % 10 == ((*program)->player.y - (*program)->player.y % 10) && j -j % 10 == ((*program)->player.x - (*program)->player.x % 10))
+					{
+					  if ((*program)->map_2d[i][j + 1] == 0)
+					{
+						(*program)->map_2d[i][j] = 0;
+						(*program)->map_2d[i][j + 1] = 5;
+
+						(*program)->map_print[i][j] = (*program)->player.tile_image;
+						(*program)->map_print[i][j + 1] = (*program)->player.enemy;
+							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, ((j % 10) + 1) * 96, (i % 10) * 96);
+							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
+							j++;
+
+
+					}
+					else if ((*program)->map_2d[i + 1][j] == 0)
+					{
+						(*program)->map_2d[i][j] = 0;
+						(*program)->map_2d[i + 1][j] = 5;
+						(*program)->map_print[i][j] = (*program)->player.tile_image;
+						(*program)->map_print[i + 1][j] = (*program)->player.enemy;
+							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, (j % 10) * 96, ((i % 10) + 1) * 96);
+							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
+							check_down[0] = i + 1;
+							check_down[1] = j;
+
+					}
+					else if ((*program)->map_2d[i][j - 1] == 0)
+					{
+						(*program)->map_2d[i][j] = 0;
+						(*program)->map_2d[i][j - 1] = 5;
+						(*program)->map_print[i][j] = (*program)->player.tile_image;
+						(*program)->map_print[i][j - 1] = (*program)->player.enemy;
+						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, ((j % 10) - 1) * 96, (i % 10) * 96);
+						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
+
+					}
+					else if ((*program)->map_2d[i - 1][j] == 0)
+					{
+						(*program)->map_2d[i][j] = 0;
+						(*program)->map_2d[i - 1][j] = 5;
+						(*program)->map_print[i][j] = (*program)->player.tile_image;
+						(*program)->map_print[i - 1][j] = (*program)->player.enemy;
+						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, (j % 10) * 96, ((i % 10) - 1) * 96);
+						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
+
+					}
+					else
+						continue;
+					}
+				}
+			}
+			j = -1;
+		}
+
+	}
+
+}
+
 
 int mouse_handler(int key, t_program *program)
 {
@@ -306,7 +398,7 @@ int **read_map_to_nbr(char *map)
 	{
 		while (map_lines[i][++k] != '\n')
 		{
-			if (map_lines[i][k] == '0' && count % 5 == 0)
+			if (map_lines[i][k] == '0' && count % 8 == 0)
 				map_lines_nbr[i][k] = 5;
 			else if (map_lines[i][k] == 'P')
 				map_lines_nbr[i][k] = 2;
@@ -491,8 +583,9 @@ int render(t_program *program)
 {
 	if (program->win == NULL)
 		return (1);
-
-	mlx_key_hook(program->win, &key_handler, program);
+	// enemy_movement(&program);
+	mlx_hook(program->win, 2, 1L<<0, &key_handler, program);
+	// mlx_key_hook(program->win, &key_handler, program);
 	mlx_mouse_hook(program->win, &mouse_handler, program);
 	mlx_hook(program->win, 6, 1L<<6, mouse_movement_handler, program);
 	return (0);
@@ -510,6 +603,7 @@ t_program *program_init(int x, int y, char *map)
 	program->lenght = x;
 	program->height = y;
 	program->map = map;
+	program->count = 0;
 	program->dir = 0;
 	program->map_2d = read_map_to_nbr(map);
 	program->row_len = check_rows_lenght(program->map,1) - 1;

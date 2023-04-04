@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/03 15:04:58 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/04 11:06:59 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ typedef struct program
 	void		***map_print;
 	int			**visited_block;
 	int			dir;
+	int			count;
 	t_player	player;
-	// t_enemy		enemy;
 }				t_program;
 
 int				main(int argc, char **argv);
@@ -142,5 +142,6 @@ void			***draw_map(t_program *program, int width, int height);
 void			print_map(t_program *program, void ***map_tiles, int i, int l);
 void			draw_base(t_program *program, int width, int height);
 void			***map_tiles_array(t_program *program, int width, int height);
+void			enemy_movement(t_program **program, int y, int x);
 
 #endif
