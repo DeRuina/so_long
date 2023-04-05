@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 17:17:00 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:30:29 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,38 +77,29 @@ t_bool	is_a_path(char *map_lines[], int i, int j, int *visited_block[])
 t_bool	check_path_recursion(char *map_lines[], int rows, int lenght,
 		int amount)
 {
-	int		i;
-	int		j;
-	int		**visited_block;
-	char	arr[2];
-	t_bool	flag;
+	int	i;
+	int	j;
+	int	**visited_block;
+	int	flag;
 
 	i = -1;
 	j = 0;
 	visited_block = (int **)ft_calloc(rows + 2, sizeof(int *));
-	visited_block[rows + 1] = 0;
 	while (i++ != rows)
 		visited_block[i] = ft_calloc(lenght, sizeof(int));
 	i = 1;
-	arr[1] = '\0';
 	flag = false;
 	while (i < rows)
 	{
 		while (j < ft_strlen(map_lines[1]) - 1)
 		{
-			arr[0] = map_lines[i][j];
-			if (ft_strncmp(arr, "P", 1) == 0 && !visited_block[i][j])
+			if (map_lines[i][j] == 'P' && !visited_block[i][j])
 			{
 				while (amount-- != 0)
 				{
 					if (is_a_path(map_lines, i, j, visited_block) == true)
-					{
-						flag = true;
 						if (amount == 0)
-							free_arrays(NULL, visited_block, 0);
-					}
-					else
-						flag = false;
+							free_arrays(NULL, visited_block, 0, &flag);
 				}
 			}
 			j++;
@@ -117,7 +108,7 @@ t_bool	check_path_recursion(char *map_lines[], int rows, int lenght,
 		i++;
 	}
 	if (flag == false)
-		free_arrays(NULL, visited_block, 0);
+		free_arrays(NULL, visited_block, 0, NULL);
 	return (flag);
 }
 
@@ -139,7 +130,7 @@ int	check_valid_path(char *map, int rows, char *item, int amount)
 	if (check_path_recursion(map_lines, rows, ft_strlen(map_lines[1]),
 			amount) == false)
 		answer = -1;
-	free_arrays(map_lines, NULL, rows);
+	free_arrays(map_lines, NULL, rows, NULL);
 	free(map_lines);
 	return (answer);
 }

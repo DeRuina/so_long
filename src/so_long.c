@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 14:15:45 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:27:13 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,7 +391,7 @@ int **read_map_to_nbr(char *map)
 		}
 		k = -1;
 	}
-	free_arrays(map_lines, NULL, map_rows(map));
+	free_arrays(map_lines, NULL, map_rows(map), NULL);
 	return (map_lines_nbr);
 }
 

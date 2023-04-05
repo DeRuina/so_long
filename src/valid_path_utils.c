@@ -6,16 +6,18 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 16:29:31 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 16:30:37 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:28:56 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	free_arrays(char *array[], int *array_int[], int rows)
+void	free_arrays(char *array[], int *array_int[], int rows, int *flag)
 {
 	int	i;
 
+	if (flag != NULL)
+		(*flag) = true;
 	i = -1;
 	if (array_int == NULL)
 	{

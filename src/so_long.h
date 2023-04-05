@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 16:36:12 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:25:35 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ t_bool			check_path_recursion(char *map_lines[], int rows, int lenght,
 t_bool			is_a_path(char *map_lines[], int i, int j,
 					int *visited_block[]);
 t_bool			check_boundaries(char *map_lines[], int i, int j);
-void			free_arrays(char *array[], int *array_int[], int rows);
+void			free_arrays(char *array[], int *array_int[], int rows,
+					int *flag);
 int				so_long(int x, int y, char *map);
 char			*join_and_free_item_and_amount(char *item, int amount,
 					char *line);
