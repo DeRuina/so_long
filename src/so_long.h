@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 09:04:48 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 14:15:50 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct player
 	void		*fire_down;
 	void		*fire_right;
 	void		*fire_left;
+	void		*poop;
 	int			pixel_exit_y;
 	int			pixel_exit_x;
 	int			**collect_array;
