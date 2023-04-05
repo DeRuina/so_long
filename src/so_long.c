@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/04 15:36:44 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 10:41:31 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,23 @@ int key_handler(int key, t_program *program)
 	int flag;
 	int i;
 	int j;
+	char *str;
 
 	if (!program->visited_block[program->player.y][program->player.x])
 		program->visited_block[program->player.y][program->player.x] = true;
 
-
-
+	str = ft_itoa(program->count);
+	mlx_put_image_to_window(program->mlx, program->win, program->player.grass, 0, 0);
+	mlx_put_image_to_window(program->mlx, program->win, program->player.tree, 0, 0);
+	mlx_put_image_to_window(program->mlx, program->win, program->player.grass, 96, 0);
+	mlx_put_image_to_window(program->mlx, program->win, program->player.tree, 96, 0);
+	mlx_string_put(program->mlx, program->win, 10, 10, 0xFFFFFF, "MOVEMENT: ");
+	mlx_string_put(program->mlx, program->win, 110, 10, 0xFFFFFF, str);
+	free (str);
+	str = ft_itoa(program->player.collect);
+	mlx_string_put(program->mlx, program->win, 10, 40, 0xFFFFFF, "NOT COLLECTED: ");
+	mlx_string_put(program->mlx, program->win, 150, 40, 0xFFFFFF, str);
+	free (str);
 	j = (program->player.y - program->player.y % 10) - 1;
 	i = (program->player.x - program->player.x % 10) -1;
 	enemy_movement(&program, j + 1, i + 1);
@@ -350,26 +361,34 @@ void enemy_movement(t_program **program, int y, int x)
 
 }
 
+// int mouse_handler(int key, t_program *program)
+// {
+// 	program = NULL;
+// 	// mlx_hook(program->win, 6, 1L<<6, mouse_movement_handler, program);
+// 	if (key == 1)
+// 	{
+// 		// if (program->flag == true)
+// 			exit(0);
+// 		// else
+// 		// 	return (0);
+// 	}
 
-int mouse_handler(int key, t_program *program)
-{
+// 	return(0);
+// }
 
+// int mouse_movement_handler(int x, int y, t_program *program)
+// {
+// 	int flag;
 
-	program = NULL;
-	if (key == 1)
-	{
-		exit(0);
-	}
-	if (key == 2)
-		ft_printf("CHAKALAK\n");
-	return(0);
-}
-
-int mouse_movement_handler(int x, int y)
-{
-	ft_printf("location is %d.%d\n", x, y);
-	return(0);
-}
+// 	flag = false;
+// 	ft_printf("%d.%d\n", y, x);
+// 	if ((x > 0 && x < 21) && (y < 0 && y > -20))
+// 		flag = true;
+// 	ft_printf("%d\n", flag);
+// 	if (flag == true)
+// 		mlx_mouse_hook(program->win, mouse_handler, program);
+// 	return(0);
+// }
 
 
 int **read_map_to_nbr(char *map)
@@ -569,14 +588,19 @@ void draw_P_and_E(t_program **program)
 	(*program)->player.player_left = mlx_xpm_file_to_image((*program)->mlx, "./img/left.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.player_up = mlx_xpm_file_to_image((*program)->mlx, "./img/up.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.player_down = mlx_xpm_file_to_image((*program)->mlx, "./img/down.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.enemy = mlx_xpm_file_to_image((*program)->mlx, "./img/basic96.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.enemy = mlx_xpm_file_to_image((*program)->mlx, "./img/hitler.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.fire_up = mlx_xpm_file_to_image((*program)->mlx, "./img/fire2.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.fire_down = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_down.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.fire_right = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_right.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.fire_left = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_left.xpm", &(*program)->width, &(*program)->elevation);
 	(*program)->player.game_over = mlx_xpm_file_to_image((*program)->mlx, "./img/game_over.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.grass = mlx_xpm_file_to_image((*program)->mlx, "./img/grass2.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.tree = mlx_xpm_file_to_image((*program)->mlx, "./img/tree2.xpm", &(*program)->width, &(*program)->elevation);
+}
 
-
+int press_exit(void)
+{
+	exit(0);
 }
 
 int render(t_program *program)
@@ -586,8 +610,8 @@ int render(t_program *program)
 	// enemy_movement(&program);
 	mlx_hook(program->win, 2, 1L<<0, &key_handler, program);
 	// mlx_key_hook(program->win, &key_handler, program);
-	mlx_mouse_hook(program->win, &mouse_handler, program);
-	mlx_hook(program->win, 6, 1L<<6, mouse_movement_handler, program);
+	// mlx_mouse_hook(program->win, &mouse_handler, program);
+	mlx_hook(program->win, 17, 1L<<17, &press_exit, program);
 	return (0);
 }
 
@@ -640,7 +664,7 @@ void ***map_tiles_array(t_program *program, int width, int height)
 			else if (program->map_2d[j][k] == 3)
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
 			else if (program->map_2d[j][k] == 5)
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/basic96.xpm", &width, &height);
+				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/hitler.xpm", &width, &height);
 			else
 				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
 		}
@@ -708,6 +732,8 @@ int	so_long(int x, int y, char *map)
 	program->map_print= draw_map(program, (*program).width, (*program).elevation);
 	draw_P_and_E(&program);
 	mlx_loop_hook((*program).mlx, &render, program);
+	if (program->mlx == NULL)
+		exit(0);
 	mlx_loop((*program).mlx);
 	exit(0);
 }

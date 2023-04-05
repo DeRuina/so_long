@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/04 11:06:59 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 09:04:48 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ typedef struct player
 	int			pixel_player_y;
 	int			pixel_player_x;
 	void		*player_image;
+	void		*grass;
+	void		*tree;
 	void		*player_right;
 	void		*player_left;
 	void		*player_up;
@@ -111,6 +113,7 @@ typedef struct program
 	int			**visited_block;
 	int			dir;
 	int			count;
+	int			flag;
 	t_player	player;
 }				t_program;
 
