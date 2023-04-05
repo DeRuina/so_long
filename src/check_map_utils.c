@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:26:29 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 15:54:55 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:15:29 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ int	check_rows_lenght(char *map, int flag)
 		if (line == NULL)
 			break ;
 		if (ft_strlen(line) != lenght)
+		{
+			free(line);
 			return (-1);
+		}
 		free(line);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 15:57:19 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:17:00 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,37 +28,8 @@ t_bool	check_boundaries(char *map_lines[], int i, int j)
 	return (false);
 }
 
-t_bool	is_a_path(char *map_lines[], int i, int j, int *visited_block[])
+t_bool	visiting_blocks(char *map_lines[], int i, int j, int *visited_block[])
 {
-	char	arr[2];
-	char	arr2[2];
-	int		amount;
-	char	*temp;
-
-	temp = map_lines[0];
-	arr[1] = '\0';
-	arr2[1] = '\0';
-	arr[0] = map_lines[i][j];
-	arr2[0] = map_lines[0][0];
-	map_lines[0]++;
-	amount = ft_atoi(map_lines[0]);
-	map_lines[0] = temp;
-	if (ft_strncmp(arr, "1", 1) == 0)
-	{
-		visited_block[i][j] = false;
-		return (false);
-	}
-	if (check_boundaries(map_lines, i, j) == true && ft_strncmp(arr, "1",
-			1) != 0 && !visited_block[i][j])
-		visited_block[i][j] = true;
-	if (ft_strncmp(arr, arr2, 1) == 0)
-	{
-		amount--;
-		map_lines[0] = join_and_free_item_and_amount(arr2, amount,
-				map_lines[0]);
-	}
-	if (amount == 0)
-		return (true);
 	if (!visited_block[i - 1][j])
 		if (is_a_path(map_lines, i - 1, j, visited_block) == true)
 			return (true);
@@ -74,21 +45,33 @@ t_bool	is_a_path(char *map_lines[], int i, int j, int *visited_block[])
 	return (false);
 }
 
-void	free_arrays(char *array[], int *array_int[], int rows)
+t_bool	is_a_path(char *map_lines[], int i, int j, int *visited_block[])
 {
-	int	i;
+	char	arr2[2];
+	int		amount;
 
-	i = -1;
-	if (array_int == NULL)
+	arr2[1] = '\0';
+	arr2[0] = map_lines[0][0];
+	amount = ft_atoi(map_lines[0] + 1);
+	if (map_lines[i][j] - '0' == 1)
 	{
-		while (i++ < rows)
-			free(array[i]);
+		visited_block[i][j] = false;
+		return (false);
 	}
-	if (array == NULL)
+	if (check_boundaries(map_lines, i, j) == true && map_lines[i][j] - '0' != 1
+		&& !visited_block[i][j])
+		visited_block[i][j] = true;
+	if (map_lines[i][j] == map_lines[0][0])
 	{
-		while (array_int[i++] != 0)
-			free(array_int[i]);
+		amount--;
+		map_lines[0] = join_and_free_item_and_amount(arr2, amount,
+				map_lines[0]);
 	}
+	if (amount == 0)
+		return (true);
+	if (visiting_blocks(map_lines, i, j, visited_block) == true)
+		return (true);
+	return (false);
 }
 
 t_bool	check_path_recursion(char *map_lines[], int rows, int lenght,
@@ -96,12 +79,13 @@ t_bool	check_path_recursion(char *map_lines[], int rows, int lenght,
 {
 	int		i;
 	int		j;
-	int		*visited_block[rows + 2];
+	int		**visited_block;
 	char	arr[2];
 	t_bool	flag;
 
 	i = -1;
 	j = 0;
+	visited_block = (int **)ft_calloc(rows + 2, sizeof(int *));
 	visited_block[rows + 1] = 0;
 	while (i++ != rows)
 		visited_block[i] = ft_calloc(lenght, sizeof(int));
@@ -137,30 +121,16 @@ t_bool	check_path_recursion(char *map_lines[], int rows, int lenght,
 	return (flag);
 }
 
-char	*join_and_free_item_and_amount(char *item, int amount, char *line)
-{
-	char	*answer;
-	char	*temp;
-	char	arr[ft_nbrlen(amount)];
-
-	if (line != NULL)
-		free(line);
-	temp = ft_itoa(amount);
-	ft_strlcpy(arr, temp, (ft_strlen(temp) + 1));
-	free(temp);
-	answer = ft_strjoin(item, arr);
-	return (answer);
-}
-
 int	check_valid_path(char *map, int rows, char *item, int amount)
 {
 	int		fd;
-	char	*map_lines[rows + 2];
+	char	**map_lines;
 	int		i;
 	int		answer;
 
 	i = 0;
 	answer = 0;
+	map_lines = (char **)malloc((rows + 2) * sizeof(char *));
 	map_lines[rows + 1] = 0;
 	fd = open(map, O_RDONLY);
 	while (i++ < (rows + 1))
@@ -170,5 +140,6 @@ int	check_valid_path(char *map, int rows, char *item, int amount)
 			amount) == false)
 		answer = -1;
 	free_arrays(map_lines, NULL, rows);
+	free(map_lines);
 	return (answer);
 }
