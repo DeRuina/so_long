@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 14:15:50 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/05 15:56:38 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,7 @@ typedef enum bool
 {
 	false = 3,
 	true = 4
-}				bool;
-
-// typedef struct enemy
-// {
-// 	void		*enemy;
-// 	int			y;
-// 	int			x;
-// 	int			pixel_enemy_y;
-// 	int			pixel_enemy_x;
-// 	int			y2;
-// 	int			x2;
-// 	int			pixel_enemy_y2;
-// 	int			pixel_enemy_x2;
-// 	int			y3;
-// 	int			x3;
-// 	int			pixel_enemy_y3;
-// 	int			pixel_enemy_x3;
-
-// }				t_enemy;
+}				t_bool;
 
 typedef struct map_check
 {
@@ -124,18 +106,18 @@ int				first_and_last_row(char *line);
 int				map_rows(char *map);
 int				check_surrounding_wall(char *line);
 int				check_rows_lenght(char *map, int flag);
-void			check_P_E_X(int *player, int *exit, int *collectible,
+void			check_p_e_x(int *player, int *exit, int *collectible,
 					char *line);
 t_map_check		map_check_init(void);
 int				free_close_exit(int fd, char *line, int flag);
 int				check_valid_path(char *map, int rows, char *item, int amount);
-void			check_P_E_locations(int *location_x, int *location_y,
+void			check_p_e_locations(int *location_x, int *location_y,
 					char *map_lines[], char *letter);
-bool			check_path_recursion(char *map_lines[], int rows, int lenght,
+t_bool			check_path_recursion(char *map_lines[], int rows, int lenght,
 					int amount);
-bool			is_a_path(char *map_lines[], int i, int j,
+t_bool			is_a_path(char *map_lines[], int i, int j,
 					int *visited_block[]);
-bool			check_boundaries(char *map_lines[], int i, int j);
+t_bool			check_boundaries(char *map_lines[], int i, int j);
 void			free_arrays(char *array[], int *array_int[], int rows);
 int				so_long(int x, int y, char *map);
 char			*join_and_free_item_and_amount(char *item, int amount,
@@ -147,5 +129,9 @@ void			print_map(t_program *program, void ***map_tiles, int i, int l);
 void			draw_base(t_program *program, int width, int height);
 void			***map_tiles_array(t_program *program, int width, int height);
 void			enemy_movement(t_program **program, int y, int x);
+int				assign(t_map_check *check, char *map, int *fd,
+					int *map_rows_count);
+int				check_quanity_and_path(int fd, char *map, int map_rows_count,
+					t_map_check *check);
 
 #endif

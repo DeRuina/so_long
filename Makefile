@@ -6,13 +6,13 @@
 #    By: druina <druina@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/07 09:33:07 by druina            #+#    #+#              #
-#    Updated: 2023/03/31 16:43:41 by druina           ###   ########.fr        #
+#    Updated: 2023/04/05 15:27:20 by druina           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
 
-SRC = so_long.c main.c check_map_content.c valid_path.c
+SRC = so_long.c main.c check_map_content.c valid_path.c check_map_utils.c
 
 MANPATH = $(addprefix ./src/, $(SRC))
 
@@ -29,7 +29,7 @@ all: $(NAME)
 $(NAME): $(MANPATH)
 	@make -C Libft
 	@cd Libft && mv libft.a ..
-	@cc $(FLAGS) -o $(NAME) $(MANPATH) -lmlx $(MLXFLAGS) libft.a $(HEADERS) -g
+	@cc $(FLAGS) -o $(NAME) $(MANPATH) -lmlx $(MLXFLAGS) libft.a $(HEADERS)
 
 clean:
 	@cd Libft && make clean
