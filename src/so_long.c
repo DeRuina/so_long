@@ -6,18 +6,11 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 17:27:13 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/06 13:44:05 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-#define ESC 53
-#define UP 126
-#define DOWN 125
-#define RIGHT 124
-#define LEFT 123
-#define FIRE 49
 
 
 
@@ -428,129 +421,200 @@ void draw_base(t_program *program, int width, int height)
 	}
 }
 
-t_player player_init(t_program *program)
+void	player_init_2(t_player *player, int y, int x, int flag)
 {
-	t_player player;
-	int i;
-	int j;
-
-	i = -1;
-	j = -1;
-	player.collect = 0;
-	player.pixel_exit_x = 0;
-	player.pixel_exit_y = 0;
-	player.pixel_player_x = 0;
-	player.pixel_player_y = 0;
-	player.x = -1;
-	player.y = -1;
-	player.exit_x = -1;
-	player.exit_y = -1;
-	player.up_down = 11;
-	player.left_right = 11;
-	while (program->map_2d[++i] != 0)
+	if (flag == 1)
 	{
-		while (++j < program->row_len)
-		{
-			if (program->map_2d[i][j] == 2)
-			{
-				player.y = i;
-				player.x = j;
-				player.pixel_player_y = (i % 10) * 96;
-				player.pixel_player_x = (j % 10) * 96;
-			}
-			if (program->map_2d[i][j] == 3)
-				player.collect++;
-			if (program->map_2d[i][j] == 4)
-			{
-				player.exit_y = i;
-				player.exit_x = j;
-				player.pixel_exit_y = (i % 10) * 96;
-				player.pixel_exit_x = (j % 10) * 96;
-			}
-		}
-
-		j = -1;
-
+		player->collect = 0;
+		player->pixel_exit_x = 0;
+		player->pixel_exit_y = 0;
+		player->pixel_player_x = 0;
+		player->pixel_player_y = 0;
+		player->x = -1;
+		player->y = -1;
+		player->exit_x = -1;
+		player->exit_y = -1;
+		player->up_down = 11;
+		player->left_right = 11;
 	}
-	player.up = 1 + (player.y % 10);
-	player.down = 1 + (player.y % 10);
-	player.left = 1 + (player.x % 10);
-	player.right = 1 + (player.x % 10);
-	player.collect_array = (int **)malloc(player.collect + 2 * sizeof(int *));
-	i = -1;
-	j = -1;
-	while (++i < player.collect)
-		player.collect_array[i] = (int *)malloc(4 * sizeof(int));
+	else
+	{
+		player->up = 1 + (y % 10);
+		player->down = 1 + (y % 10);
+		player->left = 1 + (x % 10);
+		player->right = 1 + (x % 10);
+	}
+}
+
+void	player_init_3(int number, t_player *player, int y, int x)
+{
+	if (number == 2)
+	{
+		player->y = y;
+		player->x = x;
+		player->pixel_player_y = (y % 10) * 96;
+		player->pixel_player_x = (x % 10) * 96;
+	}
+	if (number == 4)
+	{
+		player->exit_y = y;
+		player->exit_x = x;
+		player->pixel_exit_y = (y % 10) * 96;
+		player->pixel_exit_x = (x % 10) * 96;
+	}
+}
+
+t_player	player_init(t_program *program)
+{
+	t_player	player;
+
+	player_init_2(&player, player.y, player.x, 1);
+	while (program->map_2d[++program->k] != 0)
+	{
+		while (++program->j < program->row_len)
+		{
+			if (program->map_2d[program->k][program->j] == 2)
+				player_init_3(2, &player, program->k, program->j);
+			if (program->map_2d[program->k][program->j] == 3)
+				player.collect++;
+			if (program->map_2d[program->k][program->j] == 4)
+				player_init_3(4, &player, program->k, program->j);
+		}
+		program->j = -1;
+	}
+	player_init_2(&player, player.y, player.x, 0);
 	return (player);
 }
 
 
-void draw_P_and_E(t_program **program)
+void	draw_p_and_e_2(t_program **program)
 {
-	(*program)->player = player_init((*program));
-	(*program)->player.player_image = mlx_xpm_file_to_image((*program)->mlx, "./img/basic96.xpm", &(*program)->width, &(*program)->elevation);
-	mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.player_image, (*program)->player.pixel_player_x, (*program)->player.pixel_player_y);
-	(*program)->player.exit_image = mlx_xpm_file_to_image((*program)->mlx, "./img/burn_door.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.tile_image = mlx_xpm_file_to_image((*program)->mlx, "./img/grass2.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.exit_granted = mlx_xpm_file_to_image((*program)->mlx, "./img/door1.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.water_image = mlx_xpm_file_to_image((*program)->mlx, "./img/water.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.player_right = mlx_xpm_file_to_image((*program)->mlx, "./img/right.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.player_left = mlx_xpm_file_to_image((*program)->mlx, "./img/left.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.player_up = mlx_xpm_file_to_image((*program)->mlx, "./img/up.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.player_down = mlx_xpm_file_to_image((*program)->mlx, "./img/down.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.enemy = mlx_xpm_file_to_image((*program)->mlx, "./img/hitler.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.fire_up = mlx_xpm_file_to_image((*program)->mlx, "./img/fire2.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.fire_down = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_down.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.fire_right = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_right.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.fire_left = mlx_xpm_file_to_image((*program)->mlx, "./img/fire_left.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.game_over = mlx_xpm_file_to_image((*program)->mlx, "./img/game_over.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.grass = mlx_xpm_file_to_image((*program)->mlx, "./img/grass2.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.tree = mlx_xpm_file_to_image((*program)->mlx, "./img/tree2.xpm", &(*program)->width, &(*program)->elevation);
-	(*program)->player.poop = mlx_xpm_file_to_image((*program)->mlx, "./img/poop.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.player_down = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/down.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.enemy = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/hitler.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.fire_up = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/fire2.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.fire_down = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/fire_down.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.fire_right = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/fire_right.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.fire_left = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/fire_left.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.game_over = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/game_over.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.grass = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/grass2.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.tree = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/tree2.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.poop = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/poop.xpm", &(*program)->width, &(*program)->elevation);
 }
 
-int press_exit(void)
+void	draw_p_and_e(t_program **program)
+{
+	(*program)->player = player_init((*program));
+	(*program)->player.player_image = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/basic96.xpm", &(*program)->width, &(*program)->elevation);
+	mlx_put_image_to_window((*program)->mlx, (*program)->win,
+		(*program)->player.player_image, (*program)->player.pixel_player_x,
+		(*program)->player.pixel_player_y);
+	(*program)->player.exit_image = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/burn_door.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.tile_image = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/grass2.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.exit_granted = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/door1.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.water_image = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/water.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.player_right = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/right.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.player_left = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/left.xpm", &(*program)->width, &(*program)->elevation);
+	(*program)->player.player_up = mlx_xpm_file_to_image((*program)->mlx,
+			"./img/up.xpm", &(*program)->width, &(*program)->elevation);
+	draw_p_and_e_2(program);
+}
+
+
+int	press_exit(void)
 {
 	exit(0);
 }
 
-int render(t_program *program)
+int	render(t_program *program)
 {
 	if (program->win == NULL)
 		return (1);
-
-	mlx_hook(program->win, 2, 1L<<0, &key_handler, program);
-	mlx_hook(program->win, 17, 1L<<17, &press_exit, program);
+	mlx_hook(program->win, 2, 1L << 0, &key_handler, program);
+	mlx_hook(program->win, 17, 1L << 17, &press_exit, program);
 	return (0);
 }
 
-t_program *program_init(int x, int y, char *map)
+void	program_init_2(t_program **program)
 {
-	t_program *program;
-	int i;
+	(*program)->count = 0;
+	(*program)->dir = 0;
+	(*program)->j = -1;
+	(*program)->k = -1;
+	(*program)->width = 96;
+	(*program)->elevation = 96;
+	(*program)->map_print = NULL;
+}
+
+t_program	*program_init(int x, int y, char *map)
+{
+	t_program	*program;
+	int			i;
 
 	i = -1;
-	program = malloc( sizeof(t_program));
-	program->width = 96;
-	program->elevation = 96;
+	program = malloc(sizeof(t_program));
+	program_init_2(&program);
 	program->lenght = x;
 	program->height = y;
 	program->map = map;
-	program->count = 0;
-	program->dir = 0;
 	program->map_2d = read_map_to_nbr(map);
-	program->row_len = check_rows_lenght(program->map,1) - 1;
+	program->row_len = check_rows_lenght(program->map, 1) - 1;
 	program->rows = map_rows(program->map);
-	program->map_print= NULL;
-	program->mlx  = mlx_init();
-	program->win = mlx_new_window(program->mlx, program->lenght, program->height, "so long");
-	program->visited_block = (int **)ft_calloc(program->rows + 2, sizeof(int *));
+	program->mlx = mlx_init();
+	program->win = mlx_new_window(program->mlx, program->lenght,
+			program->height, "so long");
+	program->visited_block = (int **)ft_calloc(program->rows + 2,
+			sizeof(int *));
 	while (i++ != program->rows)
-		program->visited_block[i] = ft_calloc((program->row_len +  1), sizeof(int));
+		program->visited_block[i] = ft_calloc((program->row_len + 1),
+				sizeof(int));
 	return (program);
 }
 
-void ***map_tiles_array(t_program *program, int width, int height)
+void	assign_map_tiles(void ***map_tiles, t_program *program, int width,
+		int height)
+{
+	while (++program->j != program->rows)
+	{
+		while (++program->k < program->row_len)
+		{
+			if (program->map_2d[program->j][program->k] == 1)
+				map_tiles[program->j][program->k] = mlx_xpm_file_to_image
+					(program->mlx, "./img/tree2.xpm", &width, &height);
+			else if (program->map_2d[program->j][program->k] == 4)
+				map_tiles[program->j][program->k] = mlx_xpm_file_to_image
+					(program->mlx, "./img/burn_door.xpm", &width, &height);
+			else if (program->map_2d[program->j][program->k] == 3)
+				map_tiles[program->j][program->k] = mlx_xpm_file_to_image
+					(program->mlx, "./img/water.xpm", &width, &height);
+			else if (program->map_2d[program->j][program->k] == 5)
+				map_tiles[program->j][program->k] = mlx_xpm_file_to_image
+					(program->mlx, "./img/hitler.xpm", &width, &height);
+			else
+				map_tiles[program->j][program->k] = mlx_xpm_file_to_image
+					(program->mlx, "./img/grass2.xpm", &width, &height);
+		}
+		program->k = -1;
+	}
+}
+
+void	***map_tiles_array(t_program *program, int width, int height)
 {
 	void	***map_tiles;
 	int		j;
@@ -561,49 +625,33 @@ void ***map_tiles_array(t_program *program, int width, int height)
 	k = -1;
 	while (++k < program->rows + 1)
 		map_tiles[k] = (void **)malloc((program->row_len) * sizeof(void **));
-	k = -1;
-	while (++j != program->rows)
-	{
-		while (++k < program->row_len)
-		{
-			if (program->map_2d[j][k] == 1)
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/tree2.xpm", &width, &height);
-			else if (program->map_2d[j][k] == 4)
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/burn_door.xpm", &width, &height);
-			else if (program->map_2d[j][k] == 3)
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/water.xpm", &width, &height);
-			else if (program->map_2d[j][k] == 5)
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/hitler.xpm", &width, &height);
-			else
-				map_tiles[j][k] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
-		}
-		k = -1;
-	}
-	return(map_tiles);
+	assign_map_tiles(map_tiles, program, width, height);
+	return (map_tiles);
 }
 
-void ***draw_map(t_program *program, int width, int height)
+
+void	***draw_map(t_program *program, int width, int height)
 {
 	int		x;
 	int		y;
-	void ***map_tiles;
+	void	***map_tiles;
 
 	draw_base(program, width, height);
 	x = 0;
 	y = 0;
 	map_tiles = map_tiles_array(program, program->width, program->elevation);
-	 y = y - y % 10;
-	 x = x - x % 10;
+	y = y - y % 10;
+	x = x - x % 10;
 	print_map(program, map_tiles, y - 1, x - 1);
-	return(map_tiles);
+	return (map_tiles);
 }
 
-void print_map(t_program *program, void ***map_tiles, int i, int l)
+void	print_map(t_program *program, void ***map_tiles, int i, int l)
 {
+	int	j;
+	int	k;
+	int	x;
 
-	int j;
-	int k;
-	int x;
 	if (i < -1)
 		i = -1;
 	if (l < -1)
@@ -615,7 +663,8 @@ void print_map(t_program *program, void ***map_tiles, int i, int l)
 	{
 		while (++l < program->row_len)
 		{
-			mlx_put_image_to_window(program->mlx, program->win, map_tiles[i][l], k, j);
+			mlx_put_image_to_window(program->mlx, program->win, map_tiles[i][l],
+				k, j);
 			k += 96;
 		}
 		k = 0;
@@ -626,8 +675,7 @@ void print_map(t_program *program, void ***map_tiles, int i, int l)
 
 int	so_long(int x, int y, char *map)
 {
-
-	t_program *program;
+	t_program	*program;
 
 	if (x > 960 || y > 960)
 	{
@@ -636,10 +684,10 @@ int	so_long(int x, int y, char *map)
 		if (y > 960)
 			y = 960;
 	}
-
 	program = program_init(x, y, map);
-	program->map_print= draw_map(program, (*program).width, (*program).elevation);
-	draw_P_and_E(&program);
+	program->map_print = draw_map(program, (*program).width,
+			(*program).elevation);
+	draw_p_and_e(&program);
 	mlx_loop_hook((*program).mlx, &render, program);
 	if (program->mlx == NULL)
 		exit(0);

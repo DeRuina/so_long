@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/06 08:34:20 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/06 13:43:43 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 # include "../Libft/src/libft.h"
 # include "mlx.h"
 # include <fcntl.h>
-# define ESC_MAC 53
+# define ESC 53
 # define UP 126
 # define DOWN 125
 # define RIGHT 124
 # define LEFT 123
-# define SHOOT 49
+# define FIRE 49
 
 typedef enum bool
 {
@@ -76,7 +76,6 @@ typedef struct player
 	void		*poop;
 	int			pixel_exit_y;
 	int			pixel_exit_x;
-	int			**collect_array;
 	void		*game_over;
 }				t_player;
 
@@ -97,6 +96,8 @@ typedef struct program
 	int			dir;
 	int			count;
 	int			flag;
+	int			j;
+	int			k;
 	t_player	player;
 }				t_program;
 
@@ -137,5 +138,19 @@ int				check_quanity_and_path(int fd, char *map, int map_rows_count,
 t_bool			visiting_blocks(char *map_lines[], int i, int j,
 					int *visited_block[]);
 int				**calloc_array(int rows, int lenght);
+int				so_long(int x, int y, char *map);
+t_program		*program_init(int x, int y, char *map);
+int				render(t_program *program);
+int				press_exit(void);
+void			draw_p_and_e(t_program **program);
+t_player		player_init(t_program *program);
+int				**read_map_to_nbr(char *map);
+void			enemy_movement(t_program **program, int y, int x);
+int				key_handler(int key, t_program *program);
+void			assign_map_tiles(void ***map_tiles, t_program *program,
+					int width, int height);
+void			program_init_2(t_program **program);
+void			draw_p_and_e_2(t_program **program);
+void			player_init_3(int number, t_player *player, int y, int x);
 
 #endif
