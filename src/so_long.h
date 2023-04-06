@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/06 13:43:43 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/06 15:02:49 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct player
 
 typedef struct program
 {
+	void		**draw_base;
 	void		*mlx;
 	void		*win;
 	int			height;
@@ -128,7 +129,7 @@ int				**read_map_to_nbr(char *map);
 void			free_program(t_program *program);
 void			***draw_map(t_program *program, int width, int height);
 void			print_map(t_program *program, void ***map_tiles, int i, int l);
-void			draw_base(t_program *program, int width, int height);
+void			**draw_base(t_program *program, int width, int height);
 void			***map_tiles_array(t_program *program, int width, int height);
 void			enemy_movement(t_program **program, int y, int x);
 int				assign(t_map_check *check, char *map, int *fd,
@@ -152,5 +153,8 @@ void			assign_map_tiles(void ***map_tiles, t_program *program,
 void			program_init_2(t_program **program);
 void			draw_p_and_e_2(t_program **program);
 void			player_init_3(int number, t_player *player, int y, int x);
+void			draw_base_on_screen(void **map_tiles, t_program *program);
+void			assign_map_lines(char **map_lines, int ***map_lines_nbr,
+					int count);
 
 #endif

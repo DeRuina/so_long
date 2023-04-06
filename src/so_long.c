@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/06 13:44:05 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/06 15:04:18 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int key_handler(int key, t_program *program)
 			if (program->player.down == program->player.up_down)
 			{
 				program->player.pixel_player_y = 0;
-				draw_base(program, program->width, program->elevation);
+				draw_base_on_screen(program->draw_base, program);
 				j += 10;
 
 				print_map(program, program->map_print, j, i);
@@ -111,7 +111,7 @@ int key_handler(int key, t_program *program)
 			if (program->player.up == program->player.up_down - 1)
 			{
 				program->player.pixel_player_y = 864;
-				draw_base(program, program->width, program->elevation);
+				draw_base_on_screen(program->draw_base, program);
 				j -= 10;
 
 				print_map(program, program->map_print, j, i);
@@ -151,7 +151,7 @@ int key_handler(int key, t_program *program)
 			if (program->player.right == program->player.left_right)
 			{
 				program->player.pixel_player_x = 0;
-				draw_base(program, program->width, program->elevation);
+				draw_base_on_screen(program->draw_base, program);
 				i += 10;
 
 				print_map(program, program->map_print, j, i);
@@ -189,7 +189,7 @@ int key_handler(int key, t_program *program)
 			if (program->player.left == program->player.left_right - 1)
 			{
 				program->player.pixel_player_x = 864;
-				draw_base(program, program->width, program->elevation);
+				draw_base_on_screen(program->draw_base, program);
 				i -= 10;
 
 				print_map(program, program->map_print, j, i);
@@ -265,146 +265,144 @@ int key_handler(int key, t_program *program)
 	return (0);
 }
 
-void enemy_movement(t_program **program, int y, int x)
+// void enemy_movement(t_program **program, int y, int x)
+// {
+// 	int i;
+// 	int j;
+// 	int check_down[2];
+// 	x = 0;
+// 	y = 0;
+// 	i = -1;
+// 	j = -1;
+// 	check_down[0] = 0;
+// 	check_down[1] = 0;
+// 	if ((*program)->count % 5 == 0)
+// 	{
+// 		while ((*program)->map_2d[++i] != 0)
+// 		{
+// 			while (++j < (*program)->row_len)
+// 			{
+// 				if ((*program)->map_2d[i][j] == 5 && (*program)->map_2d[i][j] != (*program)->map_2d[check_down[0]][check_down[1]])
+// 				{
+// 					if (i - i % 10 == ((*program)->player.y - (*program)->player.y % 10) && j -j % 10 == ((*program)->player.x - (*program)->player.x % 10))
+// 					{
+// 					  if ((*program)->map_2d[i][j + 1] == 0)
+// 					{
+// 						(*program)->map_2d[i][j] = 0;
+// 						(*program)->map_2d[i][j + 1] = 5;
+
+// 						(*program)->map_print[i][j] = (*program)->player.tile_image;
+// 						(*program)->map_print[i][j + 1] = (*program)->player.enemy;
+// 							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, ((j % 10) + 1) * 96, (i % 10) * 96);
+// 							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
+// 							j++;
+
+
+// 					}
+// 					else if ((*program)->map_2d[i + 1][j] == 0)
+// 					{
+// 						(*program)->map_2d[i][j] = 0;
+// 						(*program)->map_2d[i + 1][j] = 5;
+// 						(*program)->map_print[i][j] = (*program)->player.tile_image;
+// 						(*program)->map_print[i + 1][j] = (*program)->player.enemy;
+// 							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, (j % 10) * 96, ((i % 10) + 1) * 96);
+// 							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
+// 							check_down[0] = i + 1;
+// 							check_down[1] = j;
+
+// 					}
+// 					else if ((*program)->map_2d[i][j - 1] == 0)
+// 					{
+// 						(*program)->map_2d[i][j] = 0;
+// 						(*program)->map_2d[i][j - 1] = 5;
+// 						(*program)->map_print[i][j] = (*program)->player.tile_image;
+// 						(*program)->map_print[i][j - 1] = (*program)->player.enemy;
+// 						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, ((j % 10) - 1) * 96, (i % 10) * 96);
+// 						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
+
+// 					}
+// 					else if ((*program)->map_2d[i - 1][j] == 0)
+// 					{
+// 						(*program)->map_2d[i][j] = 0;
+// 						(*program)->map_2d[i - 1][j] = 5;
+// 						(*program)->map_print[i][j] = (*program)->player.tile_image;
+// 						(*program)->map_print[i - 1][j] = (*program)->player.enemy;
+// 						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, (j % 10) * 96, ((i % 10) - 1) * 96);
+// 						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
+
+// 					}
+// 					else
+// 						continue;
+// 					}
+// 				}
+// 			}
+// 			j = -1;
+// 		}
+
+// 	}
+
+// }
+
+void	assign_map_lines(char **map_lines, int ***map_lines_nbr, int count)
 {
-	int i;
-	int j;
-	int check_down[2];
-	x = 0;
-	y = 0;
-	i = -1;
-	j = -1;
-	check_down[0] = 0;
-	check_down[1] = 0;
-	if ((*program)->count % 5 == 0)
-	{
-		while ((*program)->map_2d[++i] != 0)
-		{
-			while (++j < (*program)->row_len)
-			{
-				if ((*program)->map_2d[i][j] == 5 && (*program)->map_2d[i][j] != (*program)->map_2d[check_down[0]][check_down[1]])
-				{
-					if (i - i % 10 == ((*program)->player.y - (*program)->player.y % 10) && j -j % 10 == ((*program)->player.x - (*program)->player.x % 10))
-					{
-					  if ((*program)->map_2d[i][j + 1] == 0)
-					{
-						(*program)->map_2d[i][j] = 0;
-						(*program)->map_2d[i][j + 1] = 5;
+	int	i;
+	int	k;
 
-						(*program)->map_print[i][j] = (*program)->player.tile_image;
-						(*program)->map_print[i][j + 1] = (*program)->player.enemy;
-							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, ((j % 10) + 1) * 96, (i % 10) * 96);
-							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
-							j++;
-
-
-					}
-					else if ((*program)->map_2d[i + 1][j] == 0)
-					{
-						(*program)->map_2d[i][j] = 0;
-						(*program)->map_2d[i + 1][j] = 5;
-						(*program)->map_print[i][j] = (*program)->player.tile_image;
-						(*program)->map_print[i + 1][j] = (*program)->player.enemy;
-							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, (j % 10) * 96, ((i % 10) + 1) * 96);
-							mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
-							check_down[0] = i + 1;
-							check_down[1] = j;
-
-					}
-					else if ((*program)->map_2d[i][j - 1] == 0)
-					{
-						(*program)->map_2d[i][j] = 0;
-						(*program)->map_2d[i][j - 1] = 5;
-						(*program)->map_print[i][j] = (*program)->player.tile_image;
-						(*program)->map_print[i][j - 1] = (*program)->player.enemy;
-						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, ((j % 10) - 1) * 96, (i % 10) * 96);
-						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
-
-					}
-					else if ((*program)->map_2d[i - 1][j] == 0)
-					{
-						(*program)->map_2d[i][j] = 0;
-						(*program)->map_2d[i - 1][j] = 5;
-						(*program)->map_print[i][j] = (*program)->player.tile_image;
-						(*program)->map_print[i - 1][j] = (*program)->player.enemy;
-						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.enemy, (j % 10) * 96, ((i % 10) - 1) * 96);
-						mlx_put_image_to_window((*program)->mlx, (*program)->win, (*program)->player.tile_image, (j % 10) * 96, (i % 10) * 96);
-
-					}
-					else
-						continue;
-					}
-				}
-			}
-			j = -1;
-		}
-
-	}
-
-}
-
-int **read_map_to_nbr(char *map)
-{
-	char	*map_lines[map_rows(map) + 1];
-	int		**map_lines_nbr;
-	int		fd;
-	int		i;
-	int		k;
-	int		count;
-
-	count = 0;
 	k = -1;
-	i = -1;
-	map_lines_nbr = malloc((map_rows(map) + 1) * sizeof(int *));
-	while (++i < (map_rows(map)))
-		map_lines_nbr[i] = malloc((check_rows_lenght(map, 1) - 1) * sizeof(int));
-	map_lines[map_rows(map)] = 0;
-	map_lines_nbr[map_rows(map)] = 0;
-	fd = open(map, O_RDONLY);
-	i = -1;
-	while (i++ < map_rows(map))
-		map_lines[i] = get_next_line_multiple(fd);
 	i = -1;
 	while (map_lines[++i] != 0)
 	{
 		while (map_lines[i][++k] != '\n')
 		{
 			if (map_lines[i][k] == '0' && count % 8 == 0)
-				map_lines_nbr[i][k] = 5;
+				(*map_lines_nbr)[i][k] = 5;
 			else if (map_lines[i][k] == 'P')
-				map_lines_nbr[i][k] = 2;
+				(*map_lines_nbr)[i][k] = 2;
 			else if (map_lines[i][k] == 'C')
-				map_lines_nbr[i][k] = 3;
+				(*map_lines_nbr)[i][k] = 3;
 			else if (map_lines[i][k] == 'E')
-				map_lines_nbr[i][k] = 4;
+				(*map_lines_nbr)[i][k] = 4;
 			else
-				map_lines_nbr[i][k] = map_lines[i][k] - '0';
+				(*map_lines_nbr)[i][k] = map_lines[i][k] - '0';
 			if (map_lines[i][k] == '0')
 				count++;
 		}
 		k = -1;
 	}
+}
+
+int	**read_map_to_nbr(char *map)
+{
+	char	**map_lines;
+	int		**map_lines_nbr;
+	int		fd;
+	int		i;
+	int		count;
+
+	count = 0;
+	i = -1;
+	map_lines = (char **)malloc((map_rows(map) + 1) * sizeof(char *));
+	map_lines_nbr = malloc((map_rows(map) + 1) * sizeof(int *));
+	while (++i < (map_rows(map)))
+		map_lines_nbr[i] = malloc((check_rows_lenght(map, 1) - 1)
+				* sizeof(int));
+	map_lines_nbr[map_rows(map)] = 0;
+	fd = open(map, O_RDONLY);
+	i = -1;
+	while (i++ < map_rows(map))
+		map_lines[i] = get_next_line_multiple(fd);
+	assign_map_lines(map_lines, &map_lines_nbr, count);
 	free_arrays(map_lines, NULL, map_rows(map), NULL);
+	free(map_lines);
 	return (map_lines_nbr);
 }
 
-void draw_base(t_program *program, int width, int height)
+void	draw_base_on_screen(void **map_tiles, t_program *program)
 {
-	int		j;
-	int 	k;
-	int		x;
-	void	*map_tiles[(program->rows * program->row_len) + 1];
+	int	j;
+	int	k;
+	int	x;
 
-	j = -1;
-	k = -1;
-	x = 0;
-	map_tiles[program->rows * program->row_len] = 0;
-	while (program->map_2d[++j] != 0)
-	{
-		while (++k < program->row_len)
-			map_tiles[x++] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &width, &height);
-		k = -1;
-	}
 	j = 0;
 	k = 0;
 	x = 0;
@@ -412,13 +410,38 @@ void draw_base(t_program *program, int width, int height)
 	{
 		while (program->row_len-- != 0)
 		{
-			mlx_put_image_to_window(program->mlx, program->win, map_tiles[x++], k, j);
+			mlx_put_image_to_window(program->mlx, program->win, map_tiles[x++],
+				k, j);
 			k += 96;
 		}
 		k = 0;
 		j += 96;
-		program->row_len = check_rows_lenght(program->map,1) - 1;
+		program->row_len = check_rows_lenght(program->map, 1) - 1;
 	}
+}
+
+void	**draw_base(t_program *program, int width, int height)
+{
+	int		j;
+	int		k;
+	int		x;
+	void	**map_tiles;
+
+	j = -1;
+	k = -1;
+	x = 0;
+	map_tiles = ft_calloc((program->rows * program->row_len) + 1,
+			sizeof(void *));
+	map_tiles[program->rows * program->row_len] = 0;
+	while (program->map_2d[++j] != 0)
+	{
+		while (++k < program->row_len)
+			map_tiles[x++] = mlx_xpm_file_to_image(program->mlx,
+					"./img/grass2.xpm", &width, &height);
+		k = -1;
+	}
+	draw_base_on_screen(map_tiles, program);
+	return (map_tiles);
 }
 
 void	player_init_2(t_player *player, int y, int x, int flag)
@@ -560,6 +583,7 @@ void	program_init_2(t_program **program)
 	(*program)->width = 96;
 	(*program)->elevation = 96;
 	(*program)->map_print = NULL;
+	(*program)-> draw_base = NULL;
 }
 
 t_program	*program_init(int x, int y, char *map)
@@ -636,7 +660,7 @@ void	***draw_map(t_program *program, int width, int height)
 	int		y;
 	void	***map_tiles;
 
-	draw_base(program, width, height);
+	program->draw_base = draw_base(program, width, height);
 	x = 0;
 	y = 0;
 	map_tiles = map_tiles_array(program, program->width, program->elevation);
