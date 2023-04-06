@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 16:29:31 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 17:28:56 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/06 09:01:58 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	free_arrays(char *array[], int *array_int[], int rows, int *flag)
 	}
 	if (array == NULL)
 	{
-		while (array_int[i++] != 0)
+		while (i++ <= rows)
 			free(array_int[i]);
 	}
 	free(array_int);
@@ -47,4 +47,16 @@ char	*join_and_free_item_and_amount(char *item, int amount, char *line)
 	answer = ft_strjoin(item, arr);
 	free(arr);
 	return (answer);
+}
+
+int	**calloc_array(int rows, int lenght)
+{
+	int	**visited_block;
+	int	i;
+
+	i = -1;
+	visited_block = (int **)ft_calloc(rows + 2, sizeof(int *));
+	while (i++ != rows)
+		visited_block[i] = ft_calloc(lenght, sizeof(int));
+	return (visited_block);
 }

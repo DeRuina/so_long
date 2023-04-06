@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 17:25:35 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/06 08:34:20 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,6 @@ int				check_quanity_and_path(int fd, char *map, int map_rows_count,
 					t_map_check *check);
 t_bool			visiting_blocks(char *map_lines[], int i, int j,
 					int *visited_block[]);
+int				**calloc_array(int rows, int lenght);
 
 #endif

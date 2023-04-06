@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/04/05 17:30:29 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/06 09:07:35 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,33 +82,23 @@ t_bool	check_path_recursion(char *map_lines[], int rows, int lenght,
 	int	**visited_block;
 	int	flag;
 
-	i = -1;
-	j = 0;
-	visited_block = (int **)ft_calloc(rows + 2, sizeof(int *));
-	while (i++ != rows)
-		visited_block[i] = ft_calloc(lenght, sizeof(int));
+	visited_block = calloc_array(rows, lenght);
+	j = -1;
 	i = 1;
 	flag = false;
 	while (i < rows)
 	{
-		while (j < ft_strlen(map_lines[1]) - 1)
-		{
+		while (++j < ft_strlen(map_lines[1]) - 1)
 			if (map_lines[i][j] == 'P' && !visited_block[i][j])
-			{
 				while (amount-- != 0)
-				{
 					if (is_a_path(map_lines, i, j, visited_block) == true)
 						if (amount == 0)
-							free_arrays(NULL, visited_block, 0, &flag);
-				}
-			}
-			j++;
-		}
+							free_arrays(NULL, visited_block, rows, &flag);
 		j = 0;
 		i++;
 	}
 	if (flag == false)
-		free_arrays(NULL, visited_block, 0, NULL);
+		free_arrays(NULL, visited_block, rows, NULL);
 	return (flag);
 }
 
