@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/06 15:04:18 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/08 21:38:44 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,7 @@ int key_handler(int key, t_program *program)
 		{
 			if (!program->visited_block[program->player.y][program->player.x])
 				program->visited_block[program->player.y][program->player.x] = true;
-				program->player.collect--;
+			program->player.collect--;
 			program->map_2d[program->player.y][program->player.x] = 0;
 			program->map_print[program->player.y][program->player.x] = mlx_xpm_file_to_image(program->mlx, "./img/grass2.xpm", &program->width, &program->elevation);
 		}
@@ -641,11 +641,9 @@ void	assign_map_tiles(void ***map_tiles, t_program *program, int width,
 void	***map_tiles_array(t_program *program, int width, int height)
 {
 	void	***map_tiles;
-	int		j;
 	int		k;
 
 	map_tiles = (void ***)malloc((program->rows + 1) * sizeof(void ***));
-	j = -1;
 	k = -1;
 	while (++k < program->rows + 1)
 		map_tiles[k] = (void **)malloc((program->row_len) * sizeof(void **));
