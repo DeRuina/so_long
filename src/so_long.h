@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/06 15:02:49 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/08 21:46:09 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void			***draw_map(t_program *program, int width, int height);
 void			print_map(t_program *program, void ***map_tiles, int i, int l);
 void			**draw_base(t_program *program, int width, int height);
 void			***map_tiles_array(t_program *program, int width, int height);
-void			enemy_movement(t_program **program, int y, int x);
+void			enemy_movement(t_program **program);
 int				assign(t_map_check *check, char *map, int *fd,
 					int *map_rows_count);
 int				check_quanity_and_path(int fd, char *map, int map_rows_count,
@@ -146,7 +146,6 @@ int				press_exit(void);
 void			draw_p_and_e(t_program **program);
 t_player		player_init(t_program *program);
 int				**read_map_to_nbr(char *map);
-void			enemy_movement(t_program **program, int y, int x);
 int				key_handler(int key, t_program *program);
 void			assign_map_tiles(void ***map_tiles, t_program *program,
 					int width, int height);

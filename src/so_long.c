@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/08 21:38:44 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/08 21:44:55 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int key_handler(int key, t_program *program)
 	free (str);
 	j = (program->player.y - program->player.y % 10) - 1;
 	i = (program->player.x - program->player.x % 10) -1;
-	enemy_movement(&program, j + 1, i + 1);
+	enemy_movement(&program);
 	flag = 4;
 	if (program->player.collect == 0)
 		flag = 1;
@@ -491,6 +491,8 @@ t_player	player_init(t_program *program)
 {
 	t_player	player;
 
+	player.x = 0;
+	player.y = 0;
 	player_init_2(&player, player.y, player.x, 1);
 	while (program->map_2d[++program->k] != 0)
 	{

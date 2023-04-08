@@ -6,20 +6,19 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:18:37 by druina            #+#    #+#             */
-/*   Updated: 2023/04/06 15:09:03 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/08 21:43:48 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	enemy_movement(t_program **program, int y, int x)
+void	enemy_movement(t_program **program)
 {
 	int	i;
 	int	j;
 	int	check_down[2];
 
-	x = 0;
-	y = 0;
+
 	i = -1;
 	j = -1;
 	check_down[0] = 0;
