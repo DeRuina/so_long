@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:18:37 by druina            #+#    #+#             */
-/*   Updated: 2023/04/11 11:40:55 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/11 13:51:44 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,75 +36,6 @@ void	keep_score(t_program **program)
 	free(str);
 }
 
-void	burn_up_and_down(t_program *program)
-{
-	if (program->dir == 1)
-	{
-		mlx_put_image_to_window(program->mlx, program->win,
-			program->player.fire_down, program->player.pixel_player_x,
-			program->player.pixel_player_y + 96);
-		if (program->map_2d[program->player.y + 1][program->player.x] == 5)
-		{
-			program->map_2d[program->player.y + 1][program->player.x] = 0;
-			program->map_print[program->player.y
-				+ 1][program->player.x] = program->player.poop;
-		}
-	}
-	if (program->dir == 2)
-	{
-		mlx_put_image_to_window(program->mlx, program->win,
-			program->player.fire_up, program->player.pixel_player_x,
-			program->player.pixel_player_y - 96);
-		if (program->map_2d[program->player.y - 1][program->player.x] == 5)
-		{
-			program->map_2d[program->player.y - 1][program->player.x] = 0;
-			program->map_print[program->player.y
-				- 1][program->player.x] = program->player.poop;
-		}
-	}
-}
-
-void	burn_right_and_left(t_program *program)
-{
-	burn_up_and_down(program);
-	if (program->dir == 3)
-	{
-		mlx_put_image_to_window(program->mlx, program->win,
-			program->player.fire_left, program->player.pixel_player_x
-			- 96, program->player.pixel_player_y);
-		if (program->map_2d[program->player.y][program->player.x - 1] == 5)
-		{
-			program->map_2d[program->player.y][program->player.x - 1] = 0;
-			program->map_print[program->player.y][program->player.x
-				- 1] = program->player.poop;
-		}
-	}
-	if (program->dir == 4)
-	{
-		mlx_put_image_to_window(program->mlx, program->win,
-			program->player.fire_right, program->player.pixel_player_x
-			+ 96, program->player.pixel_player_y);
-		if (program->map_2d[program->player.y][program->player.x + 1] == 5)
-		{
-			program->map_2d[program->player.y][program->player.x + 1] = 0;
-			program->map_print[program->player.y][program->player.x
-				+ 1] = program->player.poop;
-		}
-	}
-}
-
-void	exit_granted(t_program *program, int i, int j)
-{
-	if (program->player.collect == 0 && ((program->player.y - program->player.y
-				% 10) - 1 == j && (program->player.exit_y
-				- program->player.exit_y % 10) - 1 == j) && ((program->player.x
-				- program->player.x % 10) - 1 == i && (program->player.exit_x
-				- program->player.exit_x % 10) - 1 == i))
-		mlx_put_image_to_window(program->mlx, program->win,
-			program->player.exit_granted, program->player.pixel_exit_x,
-			program->player.pixel_exit_y);
-}
-
 void	player_collect(t_program *program)
 {
 	if (program->map_2d[program->player.y][program->player.x] == 3
@@ -120,44 +51,61 @@ void	player_collect(t_program *program)
 	}
 }
 
-void	key_handler2(int key, t_program *program, int i, int j)
+void	assign_map_lines(char **map_lines, int ***map_lines_nbr, int count)
 {
-	if (key == ESC)
-		exit(EXIT_SUCCESS);
-	if (key != FIRE)
-		if (program->map_2d[program->player.y][program->player.x] == 5)
-			exit(EXIT_SUCCESS);
-	if (key == FIRE)
-		burn_right_and_left(program);
-	player_collect(program);
-	exit_granted(program, i, j);
-	if (program->map_2d[program->player.y][program->player.x] == 4)
-		exit(EXIT_SUCCESS);
+	int	i;
+	int	k;
+
+	k = -1;
+	i = -1;
+	while (map_lines[++i] != 0)
+	{
+		while (map_lines[i][++k] != '\n')
+		{
+			if (map_lines[i][k] == '0' && count % 8 == 0)
+				(*map_lines_nbr)[i][k] = 5;
+			else if (map_lines[i][k] == 'P')
+				(*map_lines_nbr)[i][k] = 2;
+			else if (map_lines[i][k] == 'C')
+				(*map_lines_nbr)[i][k] = 3;
+			else if (map_lines[i][k] == 'E')
+				(*map_lines_nbr)[i][k] = 4;
+			else
+				(*map_lines_nbr)[i][k] = map_lines[i][k] - '0';
+			if (map_lines[i][k] == '0')
+				count++;
+		}
+		k = -1;
+	}
 }
 
-int	key_handler(int key, t_program *program)
+int	**read_map_to_nbr(char *map)
 {
-	int		flag;
+	char	**map_lines;
+	int		**map_lines_nbr;
+	int		fd;
 	int		i;
-	int		j;
+	int		count;
 
-	if (!program->visited_block[program->player.y][program->player.x])
-		program->visited_block[program->player.y][program->player.x] = true;
-	flag = 4;
-	keep_score(&program);
-	j = (program->player.y - program->player.y % 10) - 1;
-	i = (program->player.x - program->player.x % 10) - 1;
-	enemy_movement(&program);
-	if (program->player.collect == 0)
-		flag = 1;
-	if (key == DOWN)
-		player_down(program, flag, j, i);
-	if (key == UP)
-		player_up(program, flag, j, i);
-	if (key == RIGHT)
-		player_right(program, flag, j, i);
-	if (key == LEFT)
-		player_left(program, flag, j, i);
-	key_handler2(key, program, i, j);
-	return (0);
+	count = 0;
+	i = -1;
+	map_lines = (char **)malloc((map_rows(map) + 1) * sizeof(char *));
+	map_lines_nbr = malloc((map_rows(map) + 1) * sizeof(int *));
+	while (++i < (map_rows(map)))
+		map_lines_nbr[i] = malloc((check_rows_lenght(map, 1) - 1)
+				* sizeof(int));
+	map_lines_nbr[map_rows(map)] = 0;
+	fd = open(map, O_RDONLY);
+	i = -1;
+	while (i++ < map_rows(map))
+		map_lines[i] = get_next_line_multiple(fd);
+	assign_map_lines(map_lines, &map_lines_nbr, count);
+	free_arrays(map_lines, NULL, map_rows(map), NULL);
+	free(map_lines);
+	return (map_lines_nbr);
+}
+
+int	press_exit(void)
+{
+	exit(0);
 }
