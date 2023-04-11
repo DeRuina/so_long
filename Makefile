@@ -6,13 +6,14 @@
 #    By: druina <druina@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/07 09:33:07 by druina            #+#    #+#              #
-#    Updated: 2023/04/06 09:25:21 by druina           ###   ########.fr        #
+#    Updated: 2023/04/11 10:57:21 by druina           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
 
-SRC = so_long.c main.c check_map_content.c valid_path.c check_map_utils.c valid_path_utils.c so_long_utils.c
+SRC = so_long.c main.c check_map_content.c valid_path.c check_map_utils.c valid_path_utils.c so_long_utils.c\
+player_up.c player_down.c player_right.c player_left.c
 
 MANPATH = $(addprefix ./src/, $(SRC))
 

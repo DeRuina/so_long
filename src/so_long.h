@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/11 09:53:13 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/11 11:36:13 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,5 +162,22 @@ void			enemy_move_left(t_program **program, int *i, int *j);
 void			enemy_move_up(t_program **program, int *i, int *j);
 void			enemy_movement2(t_program **program, int *i, int *j,
 					int check_down[]);
+void			keep_score(t_program **program);
+void			player_down(t_program *program, int flag, int j, int i);
+void			player_down2(t_program *program);
+void			player_down3(t_program *program);
+void			player_up(t_program *program, int flag, int j, int i);
+void			player_up2(t_program *program);
+void			player_up3(t_program *program);
+void			player_right(t_program *program, int flag, int j, int i);
+void			player_right2(t_program *program);
+void			player_right3(t_program *program);
+void			player_left(t_program *program, int flag, int j, int i);
+void			player_left2(t_program *program);
+void			player_left3(t_program *program);
+void			burn_right_and_left(t_program *program);
+void			burn_up_and_down(t_program *program);
+void			exit_granted(t_program *program, int i, int j);
+void			player_collect(t_program *program);
 
 #endif
