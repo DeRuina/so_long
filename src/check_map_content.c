@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 17:54:13 by druina            #+#    #+#             */
-/*   Updated: 2023/04/06 08:43:33 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/11 08:50:00 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ int	free_close_exit(int fd, char *line, int flag)
 int	check_quanity_and_path(int fd, char *map, int map_rows_count,
 		t_map_check *check)
 {
-	// map = NULL;
-	// map_rows_count = 0;
 	if (check->exit != 1 || check->player != 1 || check->collectible < 1)
 		return (free_close_exit(fd, NULL, -1));
 	if (check_valid_path(map, map_rows_count, "E", 1) == -1)

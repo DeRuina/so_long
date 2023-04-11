@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:35:36 by druina            #+#    #+#             */
-/*   Updated: 2023/04/08 21:46:09 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/11 09:53:13 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,5 +155,12 @@ void			player_init_3(int number, t_player *player, int y, int x);
 void			draw_base_on_screen(void **map_tiles, t_program *program);
 void			assign_map_lines(char **map_lines, int ***map_lines_nbr,
 					int count);
+void			enemy_move_right(t_program **program, int *i, int *j);
+void			enemy_move_down(t_program **program, int *i, int *j,
+					int check_down[]);
+void			enemy_move_left(t_program **program, int *i, int *j);
+void			enemy_move_up(t_program **program, int *i, int *j);
+void			enemy_movement2(t_program **program, int *i, int *j,
+					int check_down[]);
 
 #endif
