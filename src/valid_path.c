@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:38:29 by druina            #+#    #+#             */
-/*   Updated: 2023/04/06 09:07:35 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:05:24 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ t_bool	check_path_recursion(char *map_lines[], int rows, int lenght,
 	int	flag;
 
 	visited_block = calloc_array(rows, lenght);
+	if (visited_block == NULL)
+		exit(EXIT_FAILURE);
 	j = -1;
 	i = 1;
 	flag = false;
@@ -112,6 +114,8 @@ int	check_valid_path(char *map, int rows, char *item, int amount)
 	i = 0;
 	answer = 0;
 	map_lines = (char **)malloc((rows + 2) * sizeof(char *));
+	if (!map_lines)
+		exit(EXIT_FAILURE);
 	map_lines[rows + 1] = 0;
 	fd = open(map, O_RDONLY);
 	while (i++ < (rows + 1))

@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:42:44 by druina            #+#    #+#             */
-/*   Updated: 2023/04/11 13:43:43 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:05:19 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,15 @@ void	***map_tiles_array(t_program *program, int width, int height)
 	int		k;
 
 	map_tiles = (void ***)malloc((program->rows + 1) * sizeof(void ***));
+	if (!map_tiles)
+		exit(EXIT_FAILURE);
 	k = -1;
 	while (++k < program->rows + 1)
+	{
 		map_tiles[k] = (void **)malloc((program->row_len) * sizeof(void **));
+		if (!map_tiles[k])
+			exit(EXIT_FAILURE);
+	}
 	assign_map_tiles(map_tiles, program, width, height);
 	return (map_tiles);
 }

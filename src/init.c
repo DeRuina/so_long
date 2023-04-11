@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:44:34 by druina            #+#    #+#             */
-/*   Updated: 2023/04/11 13:45:33 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:04:26 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_program	*program_init(int x, int y, char *map)
 
 	i = -1;
 	program = malloc(sizeof(t_program));
+	if (!program)
+		exit(EXIT_FAILURE);
 	program_init_2(&program);
 	program->lenght = x;
 	program->height = y;

@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:18:37 by druina            #+#    #+#             */
-/*   Updated: 2023/04/11 13:51:44 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:12:50 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,14 @@ int	**read_map_to_nbr(char *map)
 	int		**map_lines_nbr;
 	int		fd;
 	int		i;
-	int		count;
 
-	count = 0;
 	i = -1;
 	map_lines = (char **)malloc((map_rows(map) + 1) * sizeof(char *));
+	if (!map_lines)
+		exit(EXIT_FAILURE);
 	map_lines_nbr = malloc((map_rows(map) + 1) * sizeof(int *));
+	if (!map_lines_nbr)
+		exit(EXIT_FAILURE);
 	while (++i < (map_rows(map)))
 		map_lines_nbr[i] = malloc((check_rows_lenght(map, 1) - 1)
 				* sizeof(int));
@@ -99,7 +101,7 @@ int	**read_map_to_nbr(char *map)
 	i = -1;
 	while (i++ < map_rows(map))
 		map_lines[i] = get_next_line_multiple(fd);
-	assign_map_lines(map_lines, &map_lines_nbr, count);
+	assign_map_lines(map_lines, &map_lines_nbr, 1);
 	free_arrays(map_lines, NULL, map_rows(map), NULL);
 	free(map_lines);
 	return (map_lines_nbr);
