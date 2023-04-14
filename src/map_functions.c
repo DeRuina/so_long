@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:42:44 by druina            #+#    #+#             */
-/*   Updated: 2023/04/11 15:05:19 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/14 09:59:08 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,22 @@ void	***draw_map(t_program *program, int width, int height)
 	int		y;
 	void	***map_tiles;
 
+	while (program->map_2d[++program->k] != 0)
+	{
+		while (++program->j < program->row_len)
+		{
+			if (program->map_2d[program->k][program->j] == 2)
+			{
+				y = program->k;
+				x = program->j;
+				break ;
+			}
+		}
+		program->j = -1;
+	}
+	program->k = -1;
+	program->j = -1;
 	program->draw_base = draw_base(program, width, height);
-	x = 0;
-	y = 0;
 	map_tiles = map_tiles_array(program, program->width, program->elevation);
 	y = y - y % 10;
 	x = x - x % 10;

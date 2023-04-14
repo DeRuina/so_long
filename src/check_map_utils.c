@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:26:29 by druina            #+#    #+#             */
-/*   Updated: 2023/04/14 08:50:36 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/14 09:09:50 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	first_and_last_row(char *line)
 	count = 0;
 	while (*line != '\n')
 	{
-		if (*line != '0' || *line != '1' || *line != 'C'
-			|| *line != 'P' || *line != 'E')
+		if (*line != '0' && *line != '1' && *line != 'C'
+			&& *line != 'P' && *line != 'E')
 			return (-1);
 		arr[0] = *line;
 		if (ft_atoi(arr) != 1)
