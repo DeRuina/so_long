@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:18:37 by druina            #+#    #+#             */
-/*   Updated: 2023/04/11 15:12:50 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:36:54 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,19 @@ void	keep_score(t_program **program)
 	char	*str;
 
 	str = ft_itoa((*program)->count);
-	mlx_put_image_to_window((*program)->mlx, (*program)->win,
-		(*program)->player.grass, 0, 0);
-	mlx_put_image_to_window((*program)->mlx, (*program)->win,
-		(*program)->player.tree, 0, 0);
-	mlx_put_image_to_window((*program)->mlx, (*program)->win,
-		(*program)->player.grass, 96, 0);
-	mlx_put_image_to_window((*program)->mlx, (*program)->win,
-		(*program)->player.tree, 96, 0);
+	mlx_string_put((*program)->mlx, (*program)->win, 10, 10,
+		0x000000, "MOVEMENT: ");
 	mlx_string_put((*program)->mlx, (*program)->win, 10, 10,
 		0xFFFFFF, "MOVEMENT: ");
+	mlx_string_put((*program)->mlx, (*program)->win, 110, 10, 0x000000, str);
 	mlx_string_put((*program)->mlx, (*program)->win, 110, 10, 0xFFFFFF, str);
 	free(str);
 	str = ft_itoa((*program)->player.collect);
+	mlx_string_put((*program)->mlx, (*program)->win, 10, 40, 0x000000,
+		"NOT COLLECTED: ");
 	mlx_string_put((*program)->mlx, (*program)->win, 10, 40, 0xFFFFFF,
 		"NOT COLLECTED: ");
+	mlx_string_put((*program)->mlx, (*program)->win, 150, 40, 0x000000, str);
 	mlx_string_put((*program)->mlx, (*program)->win, 150, 40, 0xFFFFFF, str);
 	free(str);
 }

@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 10:55:57 by druina            #+#    #+#             */
-/*   Updated: 2023/04/11 10:56:30 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/14 10:15:45 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	player_left2(t_program *program)
 	program->count++;
 	program->player.right--;
 	program->player.left--;
-	if (program->player.left == 1)
+	if (program->player.left == 0)
 		program->player.left_right -= 10;
 	mlx_put_image_to_window(program->mlx, program->win,
 		program->map_print[program->player.y

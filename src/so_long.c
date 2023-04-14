@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/14 09:58:39 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:36:33 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ void	key_handler2(int key, t_program *program, int i, int j)
 {
 	if (key == ESC)
 		exit(EXIT_SUCCESS);
-	if (key != FIRE)
-		if (program->map_2d[program->player.y][program->player.x] == 5)
-			exit(EXIT_SUCCESS);
+	if (program->map_2d[program->player.y][program->player.x] == 5)
+		exit(EXIT_SUCCESS);
 	if (key == FIRE)
 		burn_right_and_left(program);
 	player_collect(program);
