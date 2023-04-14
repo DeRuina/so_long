@@ -1,4 +1,4 @@
-
+![](https://user-images.githubusercontent.com/81315494/232047437-1ccc71f3-f963-4b33-ba02-12fa9713c5c8.gif)
 # so_long
 
 ## Description
