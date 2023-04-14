@@ -32,6 +32,8 @@ Your moves and amount of uncollected waterdrops is showed on the top left of the
 
 You can close the game with ``esc`` or by clicking on the x in the left corner.
 
+https://user-images.githubusercontent.com/81315494/232041593-29c119ed-80e6-4c87-920f-9bbcfd53c1b4.mp4
+
 ## LET ME PLAY ##
 
 ```bash
@@ -48,6 +50,10 @@ $ make
 $ ./so_long maps/<map of your choice>.ber
 
 ```
+
+https://user-images.githubusercontent.com/81315494/232041777-8ee460f7-77f9-4118-91c4-cb320addecf5.mp4
+
+
 ### Evaluated by 42 
 
 ![125/100](img/125.png)
