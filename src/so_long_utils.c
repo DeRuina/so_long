@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 09:18:37 by druina            #+#    #+#             */
-/*   Updated: 2023/04/14 13:36:54 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/17 13:13:24 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	keep_score(t_program **program)
 	char	*str;
 
 	str = ft_itoa((*program)->count);
+	ft_printf("MOVES: %s\n", str);
 	mlx_string_put((*program)->mlx, (*program)->win, 10, 10,
 		0x000000, "MOVEMENT: ");
 	mlx_string_put((*program)->mlx, (*program)->win, 10, 10,

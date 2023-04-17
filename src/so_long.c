@@ -6,7 +6,7 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:38:45 by druina            #+#    #+#             */
-/*   Updated: 2023/04/14 13:36:33 by druina           ###   ########.fr       */
+/*   Updated: 2023/04/17 13:11:56 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	key_handler(int key, t_program *program)
 	if (!program->visited_block[program->player.y][program->player.x])
 		program->visited_block[program->player.y][program->player.x] = true;
 	flag = 4;
-	keep_score(&program);
 	j = (program->player.y - program->player.y % 10) - 1;
 	i = (program->player.x - program->player.x % 10) - 1;
 	enemy_movement(&program);
@@ -50,6 +49,7 @@ int	key_handler(int key, t_program *program)
 	if (key == LEFT)
 		player_left(program, flag, j, i);
 	key_handler2(key, program, i, j);
+	keep_score(&program);
 	return (0);
 }
 
